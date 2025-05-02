@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&family=Tektur:wght@400..900&display=swap');
+/// menu
+.menu_active {
+  border: 2px solid #2d09b9;
+  backdrop-filter: blur(16.700000762939453px);
+  box-shadow: -4px 5px 4px 0px #0000001a inset;
+  box-shadow: 0px 0px 4px 0px #ffffff8c inset;
+  background: #381bb1;
+}
+
+//  header info
+ .header_info >div {
+    backdrop-filter: blur(13.300000190734863px);
+    padding: 6px 14px;
+background-color: #7430FF80;
+border-radius: 100px;
+ }
+ .header_info_with_sound >div:first-child {
+  backdrop-filter: blur(13.300000190734863px);
+  padding: 6px 14px;
+background-color: #7430FF80;
+border-radius: 100px;
+ }
+
+
+ /// history
+ .history_container > .history_slider {
+    border: 0.5px solid #0000000A;
+    box-shadow: 0px 3px 1px 0px #0000000A;
+    box-shadow: 0px 3px 8px 0px #0000001F;
+    
+ }
+ .history_container .history_block {
+   box-shadow: 0px 0px 4px 0px #00000026;
+
+ }
+
+ //// withdraw 
+ .withdraw_container input {
+
+  background: #482BAB;
+  border-top: 1px solid #381CB280;
+  box-shadow: 0px 0px 2px 0px #00000026;
+outline: none;
+border-radius: 100px;
+padding: 13.5px 16px;
+ }
+ .withdraw_container .ton_input {
+  position: relative;
+  padding: 13.5px 45px;
+ }
+ .withdraw_container .ton_input::after {
+  content: '33e';
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white; /* чтобы текст был виден на фоне */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* чтобы клик проходил сквозь псевдоэлемент */
+}
+
+
+/// bet 
+.bet_container input {
+  border-top: 1px solid #381CB280;
+  background: #482BAB;
+  box-shadow: 0px 0px 2px 0px #00000026;
+  border-radius: 100px;
+  padding: 14px 16px;
+  outline: none;
+
+}
+
+.bet_container input::placeholder {
+color: #999999;
+
+
+}
+.bet_container .ton_input {
+  padding: 14 45px;
+}
+/// balance
+.balance {
+  backdrop-filter: blur(13.300000190734863px);
+
+}
+
+/// spin
+ .spin_btn {
+  // box-shadow: 0px 0px 1px 0px  #8643FA;
+
+// box-shadow: 0px 0px 8px 2px  #8643FA;
+box-shadow: 0px 0px 8px 2px  #8a5dd8;
+ }
+
+ .purple {
+  background: radial-gradient(55.59% 107.52% at 46.11% 45.1%, #F8F0E4 18%, #742CF1 59%, #381CB4 100%);
+
+ }
+ .box {
+  background: linear-gradient(180deg, #FFFFFF 5.95%, #FFFFFF 99.38%);
+background-blend-mode: overlay;
+
+ }
+ .white_part {
+  box-shadow: -0.68px 1px 1.1px 0px #3D151540;
+
+ }
+ .game {
+  background: radial-gradient(125.83% 285.98% at 104.37% 119.95%,  #742CF1 59%, #381CB4 100%);
+
+
+ }
+ .black {
+  width: calc(100% - 10px);
+  height: calc(100% - 8px);
+  z-index: 2;
+ }
+ .box_shadow {
+  background: linear-gradient(180deg, #4A4A4A 18.21%, rgba(74, 74, 74, 0.71) 52.92%, rgba(255, 255, 255, 0) 87.63%);
+background-blend-mode: multiply; 
+width: 100%; 
+position: absolute;
+height: 44px;
+top: 0px;
+z-index: 3;
+ }
+@keyframes Spin {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-200px);
+  }
+}
+.animSpin {
+  animation: Spin 1s ease-in-out forwards;
+}
+
+
+/// mine
+.mine_container {
+  background-image: url('/dirt.png');
+  background-repeat: no-repeat;
+  background-size: 100%  120%;
+  background-position: 0px -40px;
+}
+@keyframes swingPickaxe {
+  0% { transform: rotate(0deg) translateX(-30px); }
+  25% { transform: rotate(65deg) translateY(55px) translateX(-10px); }
+  50% { transform: rotate(65deg) translateY(55px) translateX(-10px); }
+  100% { transform: rotate(0deg) translateX(-30px); }
+}
+
+.kirka {
+  animation: swingPickaxe 1s infinite ease-in-out;
+  transform-origin: bottom right; /* Центр вращения — откуда "машется" кирка */
+}

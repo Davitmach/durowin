@@ -1,0 +1,55 @@
+'use client';
+import { useState } from "react"
+import { FaQuestion } from "react-icons/fa6";
+import Image from 'next/image';
+
+interface IFlames {
+  status: boolean;
+}
+
+export const Flames = ({ status }: IFlames) => {
+  const [active, setActive] = useState(false);
+
+  return (
+    <div
+      className="w-full h-[80px] cursor-pointer"
+      style={{ perspective: '1000px' }}
+      onClick={() => setActive(true)}
+    >
+      <div
+        className={`w-full h-full relative transition-transform duration-700`}
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: active ? 'rotateY(180deg)' : 'rotateY(0deg)',
+        }}
+      >
+        {/* FRONT SIDE */}
+        <div
+          className="absolute w-full h-full rounded-[16px] bg-[#FDFBEE] flex items-center justify-center gap-4"
+          style={{
+            backfaceVisibility: 'hidden',
+          }}
+        >
+          <FaQuestion fontSize={40} color="#742CF1" />
+        </div>
+
+        {/* BACK SIDE */}
+        <div
+          className="absolute w-full h-full rounded-[16px] bg-[#FDFBEE] flex items-center justify-center gap-4"
+          style={{
+            transform: 'rotateY(180deg)',
+            backfaceVisibility: 'hidden',
+          }}
+        >
+          {status ? (
+            <svg width="44" height="40" viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M42.9308 8.44833L23.9696 38.6422C23.7377 39.0078 23.4168 39.3087 23.037 39.5168C22.6572 39.7248 22.2309 39.8331 21.7979 39.8317C21.3648 39.8302 20.9392 39.719 20.5609 39.5085C20.1825 39.2979 19.8636 38.9949 19.6341 38.6277L1.0427 8.43383C0.520894 7.58862 0.246296 6.61413 0.250038 5.62083C0.272303 4.15345 0.876493 2.75499 1.92973 1.73303C2.98296 0.711065 4.39898 0.149286 5.86637 0.171244H38.1579C41.244 0.168827 43.75 2.59999 43.75 5.60633C43.75 6.60441 43.4697 7.59041 42.9308 8.44833ZM5.6102 7.43333L19.4408 28.7628V5.28733H7.05537C5.6247 5.28733 4.98429 6.23466 5.6102 7.43816M24.5569 28.7677L38.3923 7.43333C39.0327 6.23224 38.3778 5.28249 36.9447 5.28249H24.5617L24.5569 28.7677Z" fill="#069CE8" />
+            </svg>
+          ) : (
+            <Image src="/flame.png" alt="Огонь" width={44} height={40} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
