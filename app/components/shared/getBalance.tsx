@@ -6,10 +6,7 @@ import { useEffect } from "react";
 
 export const GetBalance = () => {
   const { setBalance,balance} = useBalanceStore();
-useEffect(()=> {
-console.log(balance,'балик');
 
-},[balance])
   useEffect(() => {
     const fetchBalance = async () => {
       try {

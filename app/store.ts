@@ -51,3 +51,13 @@ export const useLanguageStore = create<LanguageStore>((set) => ({
     }
   },
 }));
+interface SoundStore {
+  sound: boolean;
+  setSound: (lang: boolean) => void;
+}
+
+
+export const useSoundStore = create<SoundStore>((set) => ({
+  sound: true, 
+  setSound: (newSoundState: boolean) => set({ sound: newSoundState }), 
+}));

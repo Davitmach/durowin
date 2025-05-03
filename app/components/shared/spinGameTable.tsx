@@ -1,5 +1,6 @@
  'use client';
 
+import { useLoopSound, useSoundPlayer } from "@/app/sound";
 import { useBalanceStore, useLanguageStore } from "@/app/store";
 import { useEffect, useRef, useState } from "react";
 const ICONS = ['meat', 'tons', 'ice', 'airplane', 'cash', 'eggplant', 'palm'];
@@ -35,6 +36,9 @@ export const SpinGameTable = ()=> {
     const [result, setResult] = useState<SpinResult | null>(null);
     const [showResult, setShowResult] = useState(false);
   const [active,setActive] = useState(false);
+  const {balance} = useBalanceStore();
+const {play} = useSoundPlayer();
+const {start,stop} = useLoopSound();
     useEffect(() => {
       // Инициализация случайными значениями при первом рендере
       const tempColumns: string[][] = [[], [], []];
@@ -46,25 +50,53 @@ export const SpinGameTable = ()=> {
       }
       setColumns(tempColumns);
     }, []);
-  
+    const [isFirstSpin, setIsFirstSpin] = useState(true); // Флаг для отслеживания первого спина
+
     const handleSpin = async () => {
+      
+      if(inputValue < balance) {
+        play('start')
       setSpin(false);
       setShowResult(false);
       setResult(null);
-      setActive(true)
-    setTimeout(() => {
-      setActive(false)
-    }, 3000);
-      // создаём рандомные 30 строк (90 значений: 3 колонки)
+      setActive(true);
+      setTimeout(() => {
+        setActive(false);
+      }, 3000);
+
+        // start()
+setTimeout(() => {
+  play('game')     
+}, 300);
+ 
+    // setTimeout(() => {
+    //   stop()
+      
+    // }, 2000);
+      // Берём текущие верхние 3 строки (если есть), чтобы сохранить их
+      const currentTop = columns.map((col) => col.slice(-3)); // Последние 3, т.е. верхние
+    
+      // Создаём рандомные 27 строк (27 значений: 3 колонки по 27)
       const tempColumns: string[][] = [[], [], []];
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 27; i++) {
         const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
         row.forEach((val, idx) => {
           tempColumns[idx].push(val);
         });
       }
     
-      setColumns(tempColumns);
+      // Если это первый спин, не меняем элементы
+      const newColumns = isFirstSpin
+        ? columns // При первом спине оставляем старые данные
+        : tempColumns.map((col, idx) => [...currentTop[idx], ...col]); // Добавляем новые для обычных спинов
+    
+      setColumns(newColumns);
+    
+      // После первого спина, обновляем флаг
+      if (isFirstSpin) {
+        setIsFirstSpin(false);
+      }
+    
       setTimeout(() => setSpin(true), 10);
     
       try {
@@ -81,30 +113,59 @@ export const SpinGameTable = ()=> {
         const data: SpinResult = await res.json();
         setBalance(data.balance);
         setResult(data);
-    
+      setTimeout(() => {
+        
+        console.log(data.result.ton_win);
+        
+        if(result &&Number(data.result.ton_win)>0) {
+          if (
+            Array.isArray(data.result.row_2) &&
+            data.result.row_2.some((item) => item?.includes?.('ton'))
+          ) {
+            play('winTon');
+            triggerAnimation()
+          }
+          else {
+            play('win')
+     
+          }
+
+
+        }
+        else {
+          play('noTon')
+        
+        }
+      }, 2000);
         setTimeout(() => {
-          const withResult: string[][] = [...tempColumns];
-       
-            withResult[0].push(data.result.row_1[0]);
-            withResult[1].push(data.result.row_1[1]);
-            withResult[2].push(data.result.row_1[2]);
-            withResult[0].push(data.result.row_2[0]);
-            withResult[1].push(data.result.row_2[1]);
-            withResult[2].push(data.result.row_2[2]);
-            withResult[0].push(data.result.row_3[0]);
-            withResult[1].push(data.result.row_3[1]);
-            withResult[2].push(data.result.row_3[2]);
-  
+          const withResult: string[][] = [...newColumns];
+    
+          // Добавляем 3 строки результата
+          withResult[0].push(data.result.row_1[0]);
+          withResult[1].push(data.result.row_1[1]);
+          withResult[2].push(data.result.row_1[2]);
+          withResult[0].push(data.result.row_2[0]);
+          withResult[1].push(data.result.row_2[1]);
+          withResult[2].push(data.result.row_2[2]);
+          withResult[0].push(data.result.row_3[0]);
+          withResult[1].push(data.result.row_3[1]);
+          withResult[2].push(data.result.row_3[2]);
+    
           setColumns(withResult);
+    
           setTimeout(() => {
-            setShowResult(true);  
+            setShowResult(true);
           }, 900);
-          
         }, 1000);
       } catch (err) {
         console.error('Ошибка:', err);
       }
-    };
+    }
+    else {
+      play('noTon')
+    }
+    ;}
+    
     
     
   
@@ -122,8 +183,41 @@ export const SpinGameTable = ()=> {
         if (ref.current) ref.current.value = newValue.toString();
         }
       };
+      const [isActive, setIsActive] = useState(false);
+
+      useEffect(() => {
+        const images = document.querySelectorAll('.falling-img');
+        images.forEach((img:any, index) => {
+          // Случайное горизонтальное положение
+          const randomLeft = Math.random();
+          img.style.setProperty('--random-left', randomLeft);
+          
+          // Случайный угол вращения
+          const randomRotate = (Math.random() * 2) + 1; // от 1 до 3 оборотов
+          img.style.setProperty('--random-rotate', randomRotate);
+    
+          // Случайная задержка для разных изображений
+          const delay = Math.random() * 2;
+          img.style.animationDelay = `${delay}s`;
+        });
+      }, [isActive]); // Когда состояние активируется, анимация обновляется
+    
+      const triggerAnimation = () => {
+       
+        
+        setIsActive(false); // Сбрасываем анимацию
+        setTimeout(() => {
+          setIsActive(true); // Перезапускаем анимацию
+        }, 50); // С небольшой задержкой, чтобы дать браузеру время сбросить анимацию
+      };
+    
     return(
       <>
+     <div className={`win_page fixed ${isActive ? 'active' : ''}`}>
+  {[...Array(40)].map((_, i) => (
+    <img key={i} src="/tons.png" alt="" className="falling-img" />
+  ))}
+</div>
         <div className="flex flex-col gap-[23px] items-center w-full mb-[130px]">
             <div className="max-w-[354px] w-full h-[219px] rounded-[12px]  relative overflow-visible">
             <div className="max-w-[354px] w-full h-[219px] rounded-[12px]  relative ">
@@ -167,7 +261,7 @@ export const SpinGameTable = ()=> {
           <div
             key={colIndex}
             className={
-              'flex bg-[#8643FA]  flex-1 flex-col  ' +
+              'flex bg-[#8643FA] bg-fixed   flex-1 flex-col  ' +
               (spin ? `spin-col  spin-delay-${colIndex}` : '')
             }
           >
@@ -185,7 +279,7 @@ export const SpinGameTable = ()=> {
                   <img
                     src={ICONS_MAP[icon]}
                     alt={icon}
-                    className="h-[43px] w-[48px]"
+                    className={` h-[43px] w-[48px]`}
                   />
                 </div>
               );
@@ -224,7 +318,10 @@ export const SpinGameTable = ()=> {
 <path d="M17.2175 6.01667L10.6792 16.4283C10.5992 16.5544 10.4886 16.6582 10.3576 16.7299C10.2266 16.8017 10.0796 16.839 9.9303 16.8385C9.78098 16.838 9.63422 16.7997 9.50374 16.7271C9.37326 16.6545 9.26332 16.55 9.18418 16.4233L2.77335 6.01167C2.59341 5.72022 2.49872 5.38419 2.50001 5.04167C2.50769 4.53568 2.71603 4.05345 3.07922 3.70105C3.4424 3.34865 3.93068 3.15493 4.43668 3.16251H15.5717C16.6358 3.16167 17.5 4.00001 17.5 5.03667C17.5 5.38084 17.4033 5.72084 17.2175 6.01667ZM4.34835 5.66667L9.11751 13.0217V4.92667H4.84668C4.35335 4.92667 4.13251 5.25334 4.34835 5.66834M10.8817 13.0233L15.6525 5.66667C15.8733 5.25251 15.6475 4.92501 15.1533 4.92501H10.8833L10.8817 13.0233Z" fill="white"/>
 </svg>
 </div>
-                <div onClick={handleIncrease} className="cursor-pointer w-[32px] h-[32px] flex items-center justify-center rounded-[8px] bg-[#FFFFFF]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div onClick={handleIncrease} style={{
+                  opacity: inputValue < balance ? '1' : '0.5'
+
+                }}  className="cursor-pointer w-[32px] h-[32px] flex items-center justify-center rounded-[8px] bg-[#FFFFFF]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.25 6.7485H6.75V11.2485H5.25V6.7485H0.75V5.2485H5.25V0.748505H6.75V5.2485H11.25V6.7485Z" fill="black"/>
 </svg>
 </div>
@@ -256,196 +353,3 @@ export const SpinGameTable = ()=> {
     </>
     )
 }
-
-
-
-// const ICONS = ['meat', 'tons', 'ice', 'airplane', 'cash', 'eggplant', 'palm'];
-// const ICONS_MAP: Record<string, string> = {
-//   meat: '/meat.png',
-//   tons: '/tons.png',
-//   ice: '/ice.png',
-//   airplane: '/airplane.png',
-//   cash: '/ton.png',
-//   eggplant: '/eggplant.png',
-//   palm: '/palm.png'
-// };
-
-// type SpinResult = {
-//   result: {
-//     row_1: string[];
-//     row_2: string[];
-//     row_3: string[];
-//     ton_win: number;
-//   };
-//   balance: number;
-// };
-
-// const getRandomIcon = () => ICONS[Math.floor(Math.random() * ICONS.length)];
-
-// export const Spin = () => {
-//   // const {setBalance} = useBalanceStore();
-//   // const [spin, setSpin] = useState(false);
-//   // const [columns, setColumns] = useState<string[][]>([[], [], []]);
-//   // const [result, setResult] = useState<SpinResult | null>(null);
-//   // const [showResult, setShowResult] = useState(false);
-
-//   // useEffect(() => {
-//   //   // Инициализация случайными значениями при первом рендере
-//   //   const tempColumns: string[][] = [[], [], []];
-//   //   for (let i = 0; i < 30; i++) {
-//   //     const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
-//   //     row.forEach((val, idx) => {
-//   //       tempColumns[idx].push(val);
-//   //     });
-//   //   }
-//   //   setColumns(tempColumns);
-//   // }, []);
-
-//   // const handleSpin = async () => {
-//   //   setSpin(false);
-//   //   setShowResult(false);
-//   //   setResult(null);
-  
-//   //   // создаём рандомные 30 строк (90 значений: 3 колонки)
-//   //   const tempColumns: string[][] = [[], [], []];
-//   //   for (let i = 0; i < 30; i++) {
-//   //     const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
-//   //     row.forEach((val, idx) => {
-//   //       tempColumns[idx].push(val);
-//   //     });
-//   //   }
-  
-//   //   setColumns(tempColumns);
-//   //   setTimeout(() => setSpin(true), 10);
-  
-//   //   try {
-//   //     const res = await fetch('https://api.durowin.xyz/games/spin/play', {
-//   //       method: 'POST',
-//   //       headers: { 'Content-Type': 'application/json' },
-//   //       body: JSON.stringify({
-//   //         user_id: 1,
-//   //         init_data: '1',
-//   //         ton_bet: 0.1,
-//   //       }),
-//   //     });
-  
-//   //     const data: SpinResult = await res.json();
-//   //     setBalance(data.balance);
-//   //     setResult(data);
-  
-//   //     // вставляем победные в конец через 5 сек
-//   //     setTimeout(() => {
-//   //       const withResult: string[][] = [...tempColumns];
-//   //       // for (let i = 0; i < data.result.row_1.length; i++) {
-//   //         withResult[0].push(data.result.row_1[0]);
-//   //         withResult[1].push(data.result.row_1[1]);
-//   //         withResult[2].push(data.result.row_1[2]);
-//   //       // }
-//   //       // Добавляем элементы из row_1, row_2, row_3 в соответствующие колонки
-//   //       // for (let i = 0; i < data.result.row_1.length; i++) {
-//   //         withResult[0].push(data.result.row_2[0]);
-//   //         withResult[1].push(data.result.row_2[1]);
-//   //         withResult[2].push(data.result.row_2[2]);
-//   //         withResult[0].push(data.result.row_3[0]);
-//   //         withResult[1].push(data.result.row_3[1]);
-//   //         withResult[2].push(data.result.row_3[2]);
-//   //       // }
-  
-//   //       setColumns(withResult);
-//   //       setShowResult(true);
-//   //     }, 1000);
-//   //   } catch (err) {
-//   //     console.error('Ошибка:', err);
-//   //   }
-//   // };
-  
-  
-
-//   // const isWinningRow = (rowIndex: number): boolean => {
-//   //   if (!result) return false;
-//   //   const rowKey = `row_${rowIndex + 1}` as keyof typeof result.result;
-//   //   const row = result.result[rowKey];
-  
-//   //   // Проверяем, является ли row массивом перед использованием метода 'every'
-//   //   if (Array.isArray(row)) {
-//   //     return row.every((val) => val === row[0]);
-//   //   }
-  
-//   //   return false;
-//   // };
-  
-
-//   return (
-//     <>
-//       <div className="h-[150px] flex overflow-hidden gap-4">
-//         {columns.map((col, colIndex) => (
-//           <div
-//             key={colIndex}
-//             className={
-//               'flex flex-col ' +
-//               (spin ? `spin-col spin-delay-${colIndex}` : '')
-//             }
-//           >
-//             {col.map((icon, i) => {
-//               const isResultPart = i >= col.length - 3; // последние 3 строки для результата
-//               const rowIndex = i - (col.length - 3);
-//               return (
-//                 <div
-//                   key={i}
-//                   className={
-//                     'h-[50px] flex items-center justify-center ' +
-//                     (isResultPart && isWinningRow(rowIndex)
-//                       ? 'border-2 border-yellow-400 rounded'
-//                       : ' ')
-//                   }
-//                 >
-//                   <img
-//                     src={ICONS_MAP[icon]}
-//                     alt={icon}
-//                     className="h-[50px] w-auto"
-//                   />
-//                 </div>
-//               );
-//             })}
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* <button
-//         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-//         onClick={handleSpin}
-//       >
-//         spin
-//       </button>
-
-//       {result && showResult && (
-//         <p className="mt-2 text-white">
-//           💰 Выигрыш: {result.result.ton_win} TON | Баланс: {result.balance}
-//         </p>
-//       )} */}
-
-//       <style jsx>{`
-//         .spin-col {
-//           animation: spin 2s ease-in-out forwards;
-//         }
-
-//         .spin-delay-1 {
-//           animation-delay: 0.3s;
-//         }
-
-//         .spin-delay-2 {
-//           animation-delay: 0.6s;
-//         }
-
-//         @keyframes spin {
-//           0% {
-//             transform: translateY(0);
-//           }
-//           100% {
-//             transform: translateY(-1000%); /* ограничили, чтобы не улетало слишком далеко */
-//           }
-//         }
-//       `}</style>
-//     </>
-//   );
-// };
