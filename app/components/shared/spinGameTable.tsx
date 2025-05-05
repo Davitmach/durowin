@@ -2,6 +2,7 @@
 
 import { useLoopSound, useSoundPlayer } from "@/app/sound";
 import { useBalanceStore, useLanguageStore } from "@/app/store";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 const ICONS = ['meat', 'tons', 'ice', 'airplane', 'cash', 'eggplant', 'palm'];
 const ICONS_MAP: Record<string, string> = {
@@ -27,6 +28,11 @@ type SpinResult = {
 const getRandomIcon = () => ICONS[Math.floor(Math.random() * ICONS.length)];
 
 export const SpinGameTable = ()=> {
+  const [auto, setAuto] = useState(false);
+  const holdTimer = useRef<any>(null);
+  const wasHeld = useRef<any>(false);
+  const intervalId = useRef<any>(null);
+const [first,setFirst] = useState(true);
     const ref = useRef<HTMLInputElement>(null);
     const {language} = useLanguageStore();
     const [inputValue, setInputValue] = useState(0.01);
@@ -38,7 +44,7 @@ export const SpinGameTable = ()=> {
   const [active,setActive] = useState(false);
   const {balance} = useBalanceStore();
 const {play} = useSoundPlayer();
-const {start,stop} = useLoopSound();
+const {push} = useRouter();
     useEffect(() => {
       // Инициализация случайными значениями при первом рендере
       const tempColumns: string[][] = [[], [], []];
@@ -52,9 +58,68 @@ const {start,stop} = useLoopSound();
     }, []);
     const [isFirstSpin, setIsFirstSpin] = useState(true); // Флаг для отслеживания первого спина
 
+    const startHold = () => {
+      wasHeld.current = false;
+      holdTimer.current = setTimeout(() => {
+        wasHeld.current = true;
+        enableAutoSpin();
+      }, 1000);
+    };
+  
+    const cancelHold = () => {
+      clearTimeout(holdTimer.current);
+    };
+  
+    // Включаем автоставку
+    const enableAutoSpin = () => {
+      if (intervalId.current) return; // уже включена
+      setAuto(true);
+      intervalId.current = setInterval(() => {
+        if (!active) {
+          handleSpin();
+        }
+      }, 7000);
+    };
+  
+    // Выключаем автоставку
+    const disableAutoSpin = () => {
+      setAuto(false);
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
+    };
+  
+    // Обычный клик
+    const handleClick = () => {
+      if (wasHeld.current) return; // не обрабатывать клик после удержания
+      if (auto) {
+        disableAutoSpin(); // выключаем авто
+      } else {
+        handleSpin(); // обычный спин
+      }
+    };
+  
+    // Очистка при размонтировании
+    useEffect(() => {
+      return () => {
+        clearTimeout(holdTimer.current);
+        clearInterval(intervalId.current);
+      };
+    }, []);
+
+
     const handleSpin = async () => {
       
+    
+
       if(inputValue < balance) {
+        if(auto == true) {
+          setTimeout(() => {
+            handleSpin()
+          }, 4000);
+        }
+        setBalance(balance -inputValue);
         play('start')
       setSpin(false);
       setShowResult(false);
@@ -63,17 +128,11 @@ const {start,stop} = useLoopSound();
       setTimeout(() => {
         setActive(false);
       }, 3000);
-
-        // start()
 setTimeout(() => {
   play('game')     
 }, 300);
  
-    // setTimeout(() => {
-    //   stop()
-      
-    // }, 2000);
-      // Берём текущие верхние 3 строки (если есть), чтобы сохранить их
+  
       const currentTop = columns.map((col) => col.slice(-3)); // Последние 3, т.е. верхние
     
       // Создаём рандомные 27 строк (27 значений: 3 колонки по 27)
@@ -84,8 +143,6 @@ setTimeout(() => {
           tempColumns[idx].push(val);
         });
       }
-    
-      // Если это первый спин, не меняем элементы
       const newColumns = isFirstSpin
         ? columns // При первом спине оставляем старые данные
         : tempColumns.map((col, idx) => [...currentTop[idx], ...col]); // Добавляем новые для обычных спинов
@@ -111,13 +168,19 @@ setTimeout(() => {
         });
     
         const data: SpinResult = await res.json();
-        setBalance(data.balance);
+      if(!data.result) {
+
+        push(`/${language}`)
+      }
+    
         setResult(data);
       setTimeout(() => {
         
+       
+        setBalance(data.balance);
         console.log(data.result.ton_win);
-        
-        if(result &&Number(data.result.ton_win)>0) {
+      
+        if(Number(data.result.ton_win)>0) {
           if (
             Array.isArray(data.result.row_2) &&
             data.result.row_2.some((item) => item?.includes?.('ton'))
@@ -129,8 +192,6 @@ setTimeout(() => {
             play('win')
      
           }
-
-
         }
         else {
           play('noTon')
@@ -172,12 +233,17 @@ setTimeout(() => {
   
     const handleIncrease = () => {
       const newValue = parseFloat((inputValue + 0.01).toFixed(2));
-      
+      if(auto == true) {
+        disableAutoSpin();
+      }
       setInputValue(newValue);
       if (ref.current) ref.current.value = newValue.toString();
     };
     const handleDicrement = () => {
         if(inputValue > 0.01) {
+          if(auto == true) {
+            disableAutoSpin();
+          }
         const newValue = parseFloat((inputValue - 0.01).toFixed(2));
         setInputValue(newValue);
         if (ref.current) ref.current.value = newValue.toString();
@@ -209,8 +275,11 @@ setTimeout(() => {
         setTimeout(() => {
           setIsActive(true); // Перезапускаем анимацию
         }, 50); // С небольшой задержкой, чтобы дать браузеру время сбросить анимацию
+        setTimeout(() => {
+          setIsActive(false)
+        }, 3000);
       };
-    
+
     return(
       <>
      <div className={`win_page fixed ${isActive ? 'active' : ''}`}>
@@ -299,6 +368,7 @@ setTimeout(() => {
            
             </div>
             <div className="mt-[4px] h-[70px] ">
+             
 <div className="font-[600] text-[#FFFFFF] text-[16px]">{language=='eng'?'Hold to start/stop auto-spin' :'Держите, чтобы начать/остановить авто-вращение'}</div>
 {showResult&&result&& result.result.ton_win > 0 && <div className="flex items-center gap-[8px] w-full justify-center mt-[24px]"><svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M23.548 4.62667L13.0867 21.2853C12.9587 21.4871 12.7817 21.6531 12.5721 21.7679C12.3626 21.8826 12.1274 21.9424 11.8885 21.9416C11.6496 21.9408 11.4148 21.8795 11.206 21.7633C10.9972 21.6471 10.8213 21.4799 10.6947 21.2773L0.437354 4.61867C0.149459 4.15235 -0.00204332 3.6147 2.08138e-05 3.06667C0.0123053 2.25708 0.345651 1.48552 0.926746 0.921677C1.50784 0.357836 2.28909 0.0478894 3.09869 0.0600041H20.9147C22.6174 0.0586708 24 1.4 24 3.05867C24 3.60934 23.8454 4.15334 23.548 4.62667ZM2.95735 4.06667L10.588 15.8347V2.88267H3.75469C2.96535 2.88267 2.61202 3.40534 2.95735 4.06934M13.4107 15.8373L21.044 4.06667C21.3974 3.404 21.036 2.88 20.2454 2.88H13.4134L13.4107 15.8373Z" fill="white"/>
@@ -314,7 +384,11 @@ setTimeout(() => {
 <path d="M11.25 1.7485H0.75V0.248505H11.25V1.7485Z" fill="black"/>
 </svg>
 </div>
-                <div className="relative"><input   onChange={(e) => setInputValue(parseFloat(e.target.value || "0"))} ref={ref} defaultValue={0.01} className="w-[106px] outline-none border border-[#381CB280] bg-[#482BAB] h-[52px] rounded-[100px] pl-[45px] text-[#999999] font-[500] text-[16px] pr-[10px] " type="number"  /><svg className="absolute top-[50%] left-[23px] translate-y-[-50%]" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div className="relative"><input   onChange={(e) => {setInputValue(parseFloat(e.target.value || "0"))
+                  if(auto == true) {
+                    disableAutoSpin()
+                  }
+                }} ref={ref} defaultValue={0.01} className="w-[106px] outline-none border border-[#381CB280] bg-[#482BAB] h-[52px] rounded-[100px] pl-[45px] text-[#999999] font-[500] text-[16px] pr-[10px] " type="number"  /><svg className="absolute top-[50%] left-[23px] translate-y-[-50%]" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M17.2175 6.01667L10.6792 16.4283C10.5992 16.5544 10.4886 16.6582 10.3576 16.7299C10.2266 16.8017 10.0796 16.839 9.9303 16.8385C9.78098 16.838 9.63422 16.7997 9.50374 16.7271C9.37326 16.6545 9.26332 16.55 9.18418 16.4233L2.77335 6.01167C2.59341 5.72022 2.49872 5.38419 2.50001 5.04167C2.50769 4.53568 2.71603 4.05345 3.07922 3.70105C3.4424 3.34865 3.93068 3.15493 4.43668 3.16251H15.5717C16.6358 3.16167 17.5 4.00001 17.5 5.03667C17.5 5.38084 17.4033 5.72084 17.2175 6.01667ZM4.34835 5.66667L9.11751 13.0217V4.92667H4.84668C4.35335 4.92667 4.13251 5.25334 4.34835 5.66834M10.8817 13.0233L15.6525 5.66667C15.8733 5.25251 15.6475 4.92501 15.1533 4.92501H10.8833L10.8817 13.0233Z" fill="white"/>
 </svg>
 </div>
@@ -326,7 +400,12 @@ setTimeout(() => {
 </svg>
 </div>
             </div>
-            <div><button disabled={active} onClick={()=> handleSpin()} className="spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
+            <div><button    onMouseDown={startHold}
+      onMouseUp={cancelHold}
+      onMouseLeave={cancelHold}
+      onTouchStart={startHold}
+      onTouchEnd={cancelHold}
+      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
         </div>
         <style jsx>{`
         .spin-col {

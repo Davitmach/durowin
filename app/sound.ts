@@ -1,32 +1,64 @@
 'use client'
+'use client'
+import { useEffect, useRef, useState } from 'react';
+import { useSoundStore } from './store';
+
+type SoundType = 'start' | 'end' | 'noTon' | 'win' | 'winTon' | 'game';
+
+const soundMap: Record<SoundType, string> = {
+  start: '/start.mp3',
+  end: '/end.mp3',
+  noTon: '/noTon.mp3',
+  win: '/win.mp3',
+  winTon: '/winTon.mp3',
+  game: '/prokrut.mp3',
+};
+
 export const useSoundPlayer = () => {
-  const {sound} = useSoundStore()
-    const play = (type: 'start' | 'end' | 'noTon' | 'win' | 'winTon'|'game') => {
-      if(sound == false)return
-      const soundMap: Record<string, string> = {
-        start: '/start.mp3',
-        end: '/end.mp3',
-        noTon: '/noTon.mp3',
-        win: '/win.mp3',
-        winTon: '/winTon.mp3',
-        game:'/prokrut.mp3'
-      };
-  
-      const src = soundMap[type];
-      if (!src) return;
-  
-      const audio = new Audio(src);
-      audio.play().catch((e) => {
-        console.warn(`Failed to play sound ${type}:`, e);
-      });
+  const { sound } = useSoundStore();
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const bufferMapRef = useRef<Map<SoundType, AudioBuffer>>(new Map());
+
+  useEffect(() => {
+    audioContextRef.current = new AudioContext();
+
+    const loadSound = async (type: SoundType, url: string) => {
+      try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioContextRef.current!.decodeAudioData(arrayBuffer);
+        bufferMapRef.current.set(type, audioBuffer);
+      } catch (err) {
+        console.warn(`Failed to load sound ${type}:`, err);
+      }
     };
-  
-    return { play };
+
+    // Предзагрузка всех звуков
+    Object.entries(soundMap).forEach(([type, url]) => {
+      loadSound(type as SoundType, url);
+    });
+
+    return () => {
+      audioContextRef.current?.close();
+    };
+  }, []);
+
+  const play = (type: SoundType) => {
+    if (!sound) return;
+    const context = audioContextRef.current;
+    const buffer = bufferMapRef.current.get(type);
+    if (!context || !buffer) return;
+
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.start();
   };
 
+  return { play };
+};
 
-  import { useEffect, useRef, useState } from 'react';
-import { useSoundStore } from './store';
+
 
 
 
