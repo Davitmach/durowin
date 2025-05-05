@@ -405,7 +405,7 @@ setTimeout(() => {
       onMouseLeave={cancelHold}
       onTouchStart={startHold}
       onTouchEnd={cancelHold}
-      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
+      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="no-select duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
         </div>
         <style jsx>{`
         .spin-col {
