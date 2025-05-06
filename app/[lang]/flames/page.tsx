@@ -20,10 +20,10 @@ export default function Page() {
             setActive(true)
             setId(data.id)
             const collectedRaw = data.collected_indexdes ?? "";
-            const collectedArray = collectedRaw
-              .split(',')
-              .map(str => str.trim())
-              .filter(Boolean); // убирает пустые строки
+            const collectedArray: string[] = collectedRaw
+            .split(',')
+            .map((str: string) => str.trim())
+            .filter(Boolean);
           
             setGameTable(collectedArray);
           }

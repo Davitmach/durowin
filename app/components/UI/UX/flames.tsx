@@ -13,7 +13,7 @@ interface IFlames {
 
 export const Flames = (props: IFlames) => {
   const [active2, setActive] = useState(false);
-  const {balance} = useBalanceStore()
+  const {balance,setBalance} = useBalanceStore()
   const[status,setStatus] = useState(false);
 const {id,active,setMap,setActive:setA,setGameTable} = useFlamesActiveGameStore();
 const Click = async()=> {
