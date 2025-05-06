@@ -37,7 +37,7 @@ const Click = async()=> {
       
       setMap(data.map)
       setA(false)
-      setBalance(data.balance)
+      setBalance(data.balance.toFixed(0))
 
     }
   })
