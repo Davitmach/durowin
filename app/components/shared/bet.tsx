@@ -7,13 +7,14 @@ import { useRef, useState } from "react";
 
 export const Bet = ()=> {
     const [open,setOpen] = useState(false);
-    const {active,setActive,id,setId,setMap,setGameTable} = useFlamesActiveGameStore()
+    const {active,setActive,id,setId,setMap,setGameTable,gameTable} = useFlamesActiveGameStore()
     const {setBalance,balance} = useBalanceStore();
     const [flames,setFlames] = useState(2); 
     const {language} = useLanguageStore();
 const ref = useRef<HTMLInputElement>(null);
 const {play} = useSoundPlayer()
 const Claim = async()=> {
+if(gameTable.length==0)return
   axios.post('https://api.durowin.xyz/games/flames/claim',{
     "init_data": "1",
     "user_id": 1,
