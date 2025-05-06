@@ -61,3 +61,25 @@ export const useSoundStore = create<SoundStore>((set) => ({
   sound: true, 
   setSound: (newSoundState: boolean) => set({ sound: newSoundState }), 
 }));
+
+interface ActiveFlameStore {
+  active: boolean;
+  id: number | null;
+  gameTable: string[];
+  map:string;
+  setActive: (active: boolean) => void;
+  setId: (id: number | null) => void;
+  setGameTable: (table: string[]) => void;
+  setMap:(map:string)=> void
+}
+
+export const useFlamesActiveGameStore = create<ActiveFlameStore>((set) => ({
+  active: false,
+  id: null,
+  gameTable: [],
+  map:'',
+  setMap:(newMap:string)=> set({map:newMap}),
+  setActive: (newActiveState: boolean) => set({ active: newActiveState }),
+  setId: (newId: number | null) => set({ id: newId }),
+  setGameTable: (newTable: string[]) => set({ gameTable: newTable }),
+}));

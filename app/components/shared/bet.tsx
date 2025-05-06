@@ -1,13 +1,67 @@
 'use client';
 
-import { useLanguageStore } from "@/app/store";
+import { useBalanceStore, useFlamesActiveGameStore, useLanguageStore } from "@/app/store";
+import axios from "axios";
 import { useRef, useState } from "react";
 
 export const Bet = ()=> {
     const [open,setOpen] = useState(false);
+    const {active,setActive,id,setId,setMap,setGameTable} = useFlamesActiveGameStore()
+    const {setBalance,balance} = useBalanceStore();
     const [flames,setFlames] = useState(2); 
     const {language} = useLanguageStore();
 const ref = useRef<HTMLInputElement>(null);
+const Claim = async()=> {
+  axios.post('https://api.durowin.xyz/games/flames/claim',{
+    "init_data": "1",
+    "user_id": 1,
+    "room_id": id
+  }
+  ).then((res)=> {
+    const data = res.data;
+    if(data.ok == true) {
+      setActive(false)
+      setId(null)
+      setBalance(data.balance)
+      setMap(data.map)
+    }
+  })
+}
+const Bet = async()=> {
+  if(ref.current ) {
+    if(ref.current.value < '0.01') return
+  axios.post('https://api.durowin.xyz/games/flames/create',{
+    "init_data": '1',
+    "user_id": 1,
+    "ton_bet": Number(ref.current?.value),
+    "flames_count": flames
+  }
+  
+  ).then((res)=> {
+    
+    const data = res.data;
+    if(data.is_ended == false) {
+      setBalance(balance - data.ton_bet)
+     setActive(true);
+     setId(data.id)
+     setMap('')
+     setGameTable([])
+    }
+  })
+}}
+const HandleBet = ()=> {
+if(active == true && id) {
+  Claim()
+  
+}
+else {
+
+if(ref.current) {
+  Bet()
+}
+}
+}
+
     return(
         <div className="mb-[100px] bet_container bg-[#260E53] w-full max-w-[400px]  rounded-[28px] p-[16px] flex flex-col gap-[16px] ">
             
@@ -79,7 +133,7 @@ const ref = useRef<HTMLInputElement>(null);
                     <div className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">MAX</div>
                 </div>
             </div>
-            <div><button className="w-full bg-[#742CF1] rounded-[100px] w-full py-[10px] font-[600] text-[16px] cursor-pointer">{language=='eng'?'Bet':'Ставка'}</button></div>
+            <div><button onClick={HandleBet}  className="w-full bg-[#742CF1] rounded-[100px] w-full py-[10px] font-[600] text-[16px] cursor-pointer">{language=='eng'?active? 'Claim':'Bet':active?  'Забрать':'Ставка'}</button></div>
         </div>
     )
 }

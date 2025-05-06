@@ -9,7 +9,7 @@ interface IDeposit {
 export const Deposit = (props:IDeposit)=> {
     const {language} = useLanguageStore();
     return(
-        <div className="bg-[#482BAB] history_block flex w-full rounded-[12px] p-[10px] justify-between items-center">
+        <div className="bg-[#482BAB] bg-fixed history_block flex w-full rounded-[12px] p-[10px] justify-between items-center">
             <div className={`flex  ${props.type == 'Withdraw' && props.status =='Process' ?'gap-[12px]' : 'gap-[0] flex-col'}`}>
                 {props.type == 'Withdraw' && props.status =='Process' ? 
                 <>

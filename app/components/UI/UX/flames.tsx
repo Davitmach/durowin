@@ -1,26 +1,76 @@
 'use client';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaQuestion } from "react-icons/fa6";
 import Image from 'next/image';
+import { useBalanceStore, useFlamesActiveGameStore } from "@/app/store";
+import axios from "axios";
 
 interface IFlames {
-  status: boolean;
+  index:number,
+  active?:boolean
+  status?:string
 }
 
-export const Flames = ({ status }: IFlames) => {
-  const [active, setActive] = useState(false);
+export const Flames = (props: IFlames) => {
+  const [active2, setActive] = useState(false);
+  const {balance} = useBalanceStore()
+  const[status,setStatus] = useState(false);
+const {id,active,setMap,setActive:setA,setGameTable} = useFlamesActiveGameStore();
+const Click = async()=> {
+  if(active == false) return 
+  axios.post('https://api.durowin.xyz/games/flames/click',{
+    "init_data": "1",
+  "user_id": 1,
+  "room_id": id,
+  "click_index": props.index
 
+  }).then((res)=> {
+    const data =res.data;
+    if(data.result == 'win') {
+      // setActive(true)
+      // setStatus(true)
+      setGameTable(data.collected_indexes.map((e:number)=> e.toString()))
+
+    }
+    else {
+     
+      
+      setMap(data.map)
+      setA(false)
+      setBalance(data.balance)
+
+    }
+  })
+}
+useEffect(()=> {
+console.log(props.active);
+
+if(props.active == true) {
+ setActive(true)
+}
+else {
+  setActive(false)
+}
+},[props.active])
+useEffect(()=> {
+if(props.status=='ton') {
+  setStatus(true)
+}
+else {
+  setStatus(false)
+}
+},[props.status])
   return (
     <div
       className="w-full h-[80px] cursor-pointer"
       style={{ perspective: '1000px' }}
-      onClick={() => setActive(true)}
+      onClick={Click}
     >
       <div
         className={`w-full h-full relative transition-transform duration-700`}
         style={{
           transformStyle: 'preserve-3d',
-          transform: active ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transform: active2 ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
       >
         {/* FRONT SIDE */}

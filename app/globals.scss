@@ -35,6 +35,7 @@ overflow: hidden;
 background-repeat: no-repeat;
 display: flex;
 justify-content: center;
+color: white;
 }
 @keyframes FadeIn {
   to {
@@ -68,7 +69,7 @@ body > svg {
 * {
   -ms-overflow-style: none;  /* IE и Edge */
   scrollbar-width: none;     /* Firefox */
-  color: white;
+  
 }
 *::-webkit-scrollbar {
   display: none;             /* Chrome и Safari */
