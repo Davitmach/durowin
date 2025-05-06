@@ -1,5 +1,6 @@
 'use client';
 
+import { useSoundPlayer } from "@/app/sound";
 import { useBalanceStore, useFlamesActiveGameStore, useLanguageStore } from "@/app/store";
 import axios from "axios";
 import { useRef, useState } from "react";
@@ -11,6 +12,7 @@ export const Bet = ()=> {
     const [flames,setFlames] = useState(2); 
     const {language} = useLanguageStore();
 const ref = useRef<HTMLInputElement>(null);
+const {play} = useSoundPlayer()
 const Claim = async()=> {
   axios.post('https://api.durowin.xyz/games/flames/claim',{
     "init_data": "1",
@@ -24,6 +26,7 @@ const Claim = async()=> {
       setId(null)
       setBalance(data.balance)
       setMap(data.map)
+      play('winFlame')
     }
   })
 }
@@ -46,6 +49,8 @@ const Bet = async()=> {
      setId(data.id)
      setMap('')
      setGameTable([])
+     
+
     }
   })
 }}
@@ -130,7 +135,11 @@ if(ref.current) {
                     }
                   }
                     }} className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">1/2</div>
-                    <div className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">MAX</div>
+                    <div  onClick={()=> {
+                      if(ref.current) {
+                        ref.current.value = balance.toString()
+                      }
+                    }} className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">MAX</div>
                 </div>
             </div>
             <div><button onClick={HandleBet}  className="w-full bg-[#742CF1] rounded-[100px] w-full py-[10px] font-[600] text-[16px] cursor-pointer">{language=='eng'?active? 'Claim':'Bet':active?  'Забрать':'Ставка'}</button></div>

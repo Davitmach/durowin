@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSoundStore } from './store';
 
-type SoundType = 'start' | 'end' | 'noTon' | 'win' | 'winTon' | 'game';
+type SoundType = 'start' | 'end' | 'noTon' | 'win' | 'winTon' | 'game' |'clickSuccess'|'clickFail'|'winFlame';
 
 const soundMap: Record<SoundType, string> = {
   start: '/start.mp3',
@@ -12,6 +12,9 @@ const soundMap: Record<SoundType, string> = {
   win: '/win.mp3',
   winTon: '/winTon.mp3',
   game: '/prokrut.mp3',
+  clickSuccess:'/clickSuccess.mp3',
+  clickFail:'/clickFail.mp3',
+  winFlame:'/winFlame.mp3'
 };
 
 export const useSoundPlayer = () => {

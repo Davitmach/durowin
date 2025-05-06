@@ -4,6 +4,7 @@ import { FaQuestion } from "react-icons/fa6";
 import Image from 'next/image';
 import { useBalanceStore, useFlamesActiveGameStore } from "@/app/store";
 import axios from "axios";
+import { useSoundPlayer } from "@/app/sound";
 
 interface IFlames {
   index:number,
@@ -16,6 +17,7 @@ export const Flames = (props: IFlames) => {
   const {balance,setBalance} = useBalanceStore()
   const[status,setStatus] = useState(false);
 const {id,active,setMap,setActive:setA,setGameTable} = useFlamesActiveGameStore();
+const {play} =useSoundPlayer()
 const Click = async()=> {
   if(active == false) return 
   axios.post('https://api.durowin.xyz/games/flames/click',{
@@ -30,20 +32,28 @@ const Click = async()=> {
       // setActive(true)
       // setStatus(true)
       setGameTable(data.collected_indexes.map((e:number)=> e.toString()))
-
+play('clickSuccess')
     }
     else {
      
-      
+      if(data.ton_win && data.map) {
+        play('winFlame')
+      }
+      else {
+        play('clickFail')
+      }
       setMap(data.map)
       setA(false)
-      setBalance(data.balance.toFixed(0))
+      
+      if(data.balance) {
 
+      setBalance(data.balance)
+      }
     }
   })
 }
 useEffect(()=> {
-console.log(props.active);
+
 
 if(props.active == true) {
  setActive(true)

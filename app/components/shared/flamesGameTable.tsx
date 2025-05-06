@@ -7,15 +7,12 @@ import { useFlamesActiveGameStore } from "@/app/store";
 
 export const FlamesGameTable = ()=> {
 const {gameTable,map} = useFlamesActiveGameStore();
-useEffect(()=> {
-console.log(gameTable);
 
-},[gameTable])
     return(
         <div className="grid grid-cols-4 gap-[16px] mt-[20px] ">
            {map=='' ?  Array.from({ length: 12 }, (_, index) => {
         const isActive = gameTable.includes(index.toString());
-        console.log(isActive,'qaqe');
+
         
         return <Flames key={index} status='ton' active={isActive} index={index} />;
       }):Array.from({ length: 12 }, (_, index) => {

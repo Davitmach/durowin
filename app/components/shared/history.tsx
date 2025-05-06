@@ -14,10 +14,7 @@ export const History = () => {
   const withdrawals = useTransactionStore((s) => s.withdrawals);
 
   const data = page === "Deposit" ? deposits : withdrawals;
-useEffect(()=> {
-console.log(withdrawals);
 
-},[withdrawals])
   return (
     <div className="mb-[90px] fadeIn mt-[24px] z-[99999999999999] history_container bg-[#260E53] rounded-[32px] py-[20px] px-[16px] flex flex-col items-center gap-[20px]">
       <div>

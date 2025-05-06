@@ -178,7 +178,7 @@ setTimeout(() => {
         
        
         setBalance(data.balance);
-        console.log(data.result.ton_win);
+
       
         if(Number(data.result.ton_win)>0) {
           if (

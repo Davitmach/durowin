@@ -28,14 +28,14 @@ export const GetBalance = () => {
           }
         }
 
-        console.log(response.data);
+  
       } catch (error) {
         console.error("Ошибка при получении баланса:", error);
         const cached = localStorage.getItem("ton_balance");
         
         
         if (cached !== null) {
-          console.log(cached,'qaq');
+
           setBalance(parseFloat(cached));
           console.warn("Ошибка запроса. Использован кэш:", cached);
         }
