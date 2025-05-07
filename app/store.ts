@@ -83,3 +83,26 @@ export const useFlamesActiveGameStore = create<ActiveFlameStore>((set) => ({
   setId: (newId: number | null) => set({ id: newId }),
   setGameTable: (newTable: string[]) => set({ gameTable: newTable }),
 }));
+
+interface ClickSuccess {
+  success: boolean;
+  setSuccess: (success: boolean) => void;
+}
+
+
+export const useClickSuccess = create<ClickSuccess>((set) => ({
+  success: false, 
+  setSuccess: (newSoundState: boolean) => set({ success: newSoundState }), 
+}));
+
+
+interface AviableBetFlame {
+  active: boolean;
+  setActive: (success: boolean) => void;
+}
+
+
+export const useAviableBetBlame = create<AviableBetFlame>((set) => ({
+  active: true, 
+  setActive: (newSoundState: boolean) => set({ active: newSoundState }), 
+}));

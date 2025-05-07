@@ -1,7 +1,7 @@
 'use client';
 
 import { useSoundPlayer } from "@/app/sound";
-import { useBalanceStore, useFlamesActiveGameStore, useLanguageStore } from "@/app/store";
+import { useAviableBetBlame, useBalanceStore, useClickSuccess, useFlamesActiveGameStore, useLanguageStore } from "@/app/store";
 import axios from "axios";
 import { useRef, useState } from "react";
 
@@ -10,11 +10,15 @@ export const Bet = ()=> {
     const {active,setActive,id,setId,setMap,setGameTable,gameTable} = useFlamesActiveGameStore()
     const {setBalance,balance} = useBalanceStore();
     const [flames,setFlames] = useState(2); 
+    const [clickSuccess,setClickSuccess] = useState(false);
+    const {success} = useClickSuccess();
     const {language} = useLanguageStore();
 const ref = useRef<HTMLInputElement>(null);
+
 const {play} = useSoundPlayer()
 const Claim = async()=> {
 if(gameTable.length==0)return
+
   axios.post('https://api.durowin.xyz/games/flames/claim',{
     "init_data": "1",
     "user_id": 1,
@@ -28,6 +32,7 @@ if(gameTable.length==0)return
       setBalance(data.balance)
       setMap(data.map)
       play('winFlame')
+  
     }
   })
 }
@@ -68,9 +73,10 @@ if(ref.current) {
 }
 }
 
-    return(
-        <div className="mb-[100px] bet_container bg-[#260E53] w-full max-w-[400px]  rounded-[28px] p-[16px] flex flex-col gap-[16px] ">
-            
+    return(<>
+    
+        <div className="relative mb-[100px] bet_container bg-[#260E53] w-full max-w-[400px]  rounded-[28px] p-[16px] flex flex-col gap-[16px] ">
+        <div className={`absolute left-[50%] translate-x-[-50%] top-[-50px] font-[600] ${success ? 'flex':'hidden'} `}><h1>TON WIN</h1></div>
             <div className="flex flex-col gap-[12px]">
                 <div className="flex gap-[12px] w-full">
                     <div className="flex-2">
@@ -143,7 +149,8 @@ if(ref.current) {
                     }} className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">MAX</div>
                 </div>
             </div>
-            <div><button onClick={HandleBet}  className="w-full bg-[#742CF1] rounded-[100px] w-full py-[10px] font-[600] text-[16px] cursor-pointer">{language=='eng'?active? 'Claim':'Bet':active?  'Забрать':'Ставка'}</button></div>
+            <div><button onClick={HandleBet}  className="outline-none w-full bg-[#742CF1] rounded-[100px] w-full py-[10px] font-[600] text-[16px] cursor-pointer">{language=='eng'?active? 'Claim':'Bet':active?  'Забрать':'Ставка'}</button></div>
         </div>
+        </>
     )
 }

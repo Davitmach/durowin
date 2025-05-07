@@ -3,11 +3,21 @@
 import axios from "axios";
 import { Flames } from "../UI/UX/flames";
 import { useEffect } from "react";
-import { useFlamesActiveGameStore } from "@/app/store";
+import { useAviableBetBlame, useFlamesActiveGameStore } from "@/app/store";
 
 export const FlamesGameTable = ()=> {
-const {gameTable,map} = useFlamesActiveGameStore();
-
+const {gameTable,map,setMap,setGameTable} = useFlamesActiveGameStore();
+const {setActive} = useAviableBetBlame()
+useEffect(()=> {
+ 
+  
+if(map!=='') {
+  setTimeout(() => {
+    setMap('')
+    setGameTable([])
+  }, 1000);
+}
+},[map,gameTable])
     return(
         <div className="grid grid-cols-4 gap-[16px] mt-[20px] ">
            {map=='' ?  Array.from({ length: 12 }, (_, index) => {
