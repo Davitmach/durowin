@@ -15,7 +15,8 @@ if(map!=='') {
   setTimeout(() => {
     setMap('')
     setGameTable([])
-  }, 1000);
+    setActive(true)
+  }, 3000);
 }
 },[map,gameTable])
     return(

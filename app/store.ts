@@ -106,3 +106,29 @@ export const useAviableBetBlame = create<AviableBetFlame>((set) => ({
   active: true, 
   setActive: (newSoundState: boolean) => set({ active: newSoundState }), 
 }));
+
+interface WinFlame {
+  win: number;
+  lose:number;
+  setWin: (success: number) => void;
+  setLose:(lose:number)=>void
+}
+
+
+export const useWinFlame = create<WinFlame>((set) => ({
+  win: 0, 
+  setWin: (newSoundState: number) => set({ win: newSoundState }), 
+  lose:0,
+  setLose:(newLoseState:number)=> set({lose:newLoseState})
+}));
+interface GameStart {
+  start:boolean;
+
+  setStart:(lose:boolean)=>void
+}
+
+
+export const useStartGame = create<GameStart>((set) => ({
+ start:false,
+ setStart:(state:boolean)=> set({start:state})
+}));

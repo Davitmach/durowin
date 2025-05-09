@@ -78,7 +78,7 @@ const {push} = useRouter();
         if (!active) {
           handleSpin();
         }
-      }, 7000);
+      }, 5000);
     };
   
     // Выключаем автоставку
@@ -119,6 +119,8 @@ const {push} = useRouter();
             handleSpin()
           }, 4000);
         }
+        console.log('qaqem vret',balance -inputValue);
+        
         setBalance(balance -inputValue);
         play('start')
       setSpin(false);
@@ -133,7 +135,10 @@ setTimeout(() => {
 }, 300);
  
   
-      const currentTop = columns.map((col) => col.slice(-3)); // Последние 3, т.е. верхние
+      // Оставляем только последние 3 значения (верхние) в каждой колонке
+const trimmedColumns = columns.map((col) => col.slice(-3));
+setColumns(trimmedColumns); // Сохраняем только верхние 3
+// Последние 3, т.е. верхние
     
       // Создаём рандомные 27 строк (27 значений: 3 колонки по 27)
       const tempColumns: string[][] = [[], [], []];
@@ -144,8 +149,9 @@ setTimeout(() => {
         });
       }
       const newColumns = isFirstSpin
-        ? columns // При первом спине оставляем старые данные
-        : tempColumns.map((col, idx) => [...currentTop[idx], ...col]); // Добавляем новые для обычных спинов
+      ? columns
+      : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
+     // Добавляем новые для обычных спинов
     
       setColumns(newColumns);
     
@@ -216,8 +222,8 @@ setTimeout(() => {
     
           setTimeout(() => {
             setShowResult(true);
-          }, 900);
-        }, 1000);
+          }, 2000);
+        }, 100);
       } catch (err) {
         console.error('Ошибка:', err);
       }
@@ -405,7 +411,7 @@ setTimeout(() => {
       onMouseLeave={cancelHold}
       onTouchStart={startHold}
       onTouchEnd={cancelHold}
-      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="no-select duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
+      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="outline-none active:scale-[1.2] no-select duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
         </div>
         <style jsx>{`
         .spin-col {

@@ -66,14 +66,43 @@ body > svg {
 #tc-widget-root {
   z-index: 999999999999999999999;
 }
-* {
-  -ms-overflow-style: none;  /* IE и Edge */
-  scrollbar-width: none;     /* Firefox */
-  
+/* Общие стили */
+// * {
+//   scrollbar-width: thin;            /* Firefox */
+//   scrollbar-color: #482bab transparent; /* Firefox: зелёный ползунок, прозрачный трек */
+// }
+
+// /* Chrome, Edge, Safari */
+// *::-webkit-scrollbar {
+//   width: 6px;
+//   height: 6px;
+// }
+
+// *::-webkit-scrollbar-track {
+//   background: transparent;
+// }
+
+// *::-webkit-scrollbar-thumb {
+//   background-color: #482bab;  /* Зелёный цвет */
+//   border-radius: 10px;
+//   border: none;
+// }
+.history {
+  scrollbar-width: thin;           
+   scrollbar-color: #482bab transparent;
 }
-*::-webkit-scrollbar {
-  display: none;             /* Chrome и Safari */
-}
+.history::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .history::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .history::-webkit-scrollbar-thumb {
+        background-color: #482bab;  /* Зелёный цвет */
+        border-radius: 10px;
+        border: none;
+      }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;

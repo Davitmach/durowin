@@ -41,7 +41,7 @@ export const History = () => {
           className="duration-[200ms] -z-[0] history_slider absolute bg-[#482BAB] w-[50%] h-[28px] rounded-[100px] top-[50%] translate-y-[-50%]"
         ></div>
       </div>
-      <div className="flex flex-col gap-[12px] w-full max-h-[368px] overflow-y-auto">
+      <div className="flex flex-col gap-[12px] w-full max-h-[368px] overflow-y-auto history">
         {data.map((item, index) => (
           <Deposit key={index} amount={item.amount} date={item.date} status={item.status} type={item.type} />
         ))}
