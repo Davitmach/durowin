@@ -81,7 +81,14 @@ body > svg {
 // *::-webkit-scrollbar-track {
 //   background: transparent;
 // }
-
+.container {
+  -ms-overflow-style: none;  /* IE и Edge */
+  scrollbar-width: none;     /* Firefox */
+  
+}
+.container::-webkit-scrollbar {
+  display: none;             /* Chrome и Safari */
+}  
 // *::-webkit-scrollbar-thumb {
 //   background-color: #482bab;  /* Зелёный цвет */
 //   border-radius: 10px;
