@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useLanguageStore } from '@/app/store';
+import { useBalanceStore, useLanguageStore } from '@/app/store';
 
 export const Withdraw = () => {
   const [amount, setAmount] = useState('');
+  const {decreaseBalance} = useBalanceStore()
   const [address, setAddress] = useState('');
 const {language} = useLanguageStore();
   const handleWithdraw = async () => {
@@ -15,12 +16,16 @@ const {language} = useLanguageStore();
     }
 
     try {
-      await axios.post('https://api.durowin.xyz/withdraws/create', {
+     const data= await axios.post('https://api.durowin.xyz/withdraws/create', {
         init_data: '1',
         user_id: 1,
         to_address: address,
         ton_amount: parseFloat(amount),
-      });
+      })
+     console.log(data.data);
+     if(data.data.status == 'process') {
+      decreaseBalance(parseFloat(amount))
+     }
      
       setAmount('');
       setAddress('');
@@ -61,7 +66,7 @@ const {language} = useLanguageStore();
       </div>
       <div className="w-full">
         <button
-          className="w-full bg-[#742CF1] rounded-[100px] py-[10px] font-[600] text-[16px] cursor-pointer"
+          className="w-full outline-none bg-[#742CF1] rounded-[100px] py-[10px] font-[600] text-[16px] cursor-pointer"
           onClick={handleWithdraw}
         >
           {language=='eng'?'Withdraw':'Вывести'}

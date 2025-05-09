@@ -9,12 +9,20 @@ export const History = () => {
   type Page = "Deposit" | "Withdraw";
   const [page, setPage] = useState<Page>("Deposit");
   const {language} = useLanguageStore();
-
+const [data,setData] = useState<any>([])
   const deposits = useTransactionStore((s) => s.deposits);
   const withdrawals = useTransactionStore((s) => s.withdrawals);
 
-  const data = page === "Deposit" ? deposits : withdrawals;
+  // const data = page === "Deposit" ? deposits.reverse() : withdrawals.reverse();
+useEffect(()=> {
+if(page =='Deposit') {
+  setData(deposits.reverse())
+}
+else {
+setData(withdrawals.reverse())
+}
 
+},[page])
   return (
     <div className="mb-[90px] fadeIn mt-[24px] z-[99999999999999] history_container bg-[#260E53] rounded-[32px] py-[20px] px-[16px] flex flex-col items-center gap-[20px]">
       <div>
@@ -42,7 +50,7 @@ export const History = () => {
         ></div>
       </div>
       <div className="flex flex-col gap-[12px] w-full max-h-[368px] overflow-y-auto history">
-        {data.map((item, index) => (
+        {data.map((item:any, index:any) => (
           <Deposit key={index} amount={item.amount} date={item.date} status={item.status} type={item.type} />
         ))}
       </div>

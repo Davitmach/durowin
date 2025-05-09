@@ -75,6 +75,9 @@ useEffect(()=> {
 
 
 if(props.active == true) {
+  console.log('qaq');
+  setStart(true)
+  
  setActive(true)
 }
 else {
