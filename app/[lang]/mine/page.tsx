@@ -4,6 +4,7 @@ import { Balance } from "@/app/components/shared/balance";
 import axios, { AxiosResponse } from "axios";
 import { log } from "util";
 import { useSoundPlayer } from "@/app/sound";
+import { useBalanceStore } from "@/app/store";
 
 export default function Page() {
        const ref = useRef<HTMLInputElement>(null);
@@ -16,6 +17,7 @@ export default function Page() {
       const [mained,setMained] = useState(false);
       const [data,setData] = useState<any>();
       const [showWin,setShowWin] = useState(false)
+      const {decreaseBalance,setBalance} = useBalanceStore();
         const handleIncrease = () => {
           const newValue = parseFloat((inputValue + 0.01).toFixed(2));
           setInputValue(newValue);
@@ -38,6 +40,7 @@ const Mine = async()=> {
 if(data.data.result) {
 play('mineStart')
 setData(data.data)
+decreaseBalance(inputValue);
 }
 setActiveGame(true)
   setLayer(data.data.result.results)
@@ -68,6 +71,7 @@ if(activeGame == false) return
      if(step ==3) {
       setStep(0)
       setActiveGame(false)
+      setBalance(data.balance)
       if(data.result.ton_win >0) {
       setShowWin(true)
       }
