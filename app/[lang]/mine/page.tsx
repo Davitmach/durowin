@@ -1,12 +1,21 @@
 'use client'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Balance } from "@/app/components/shared/balance";
+import axios, { AxiosResponse } from "axios";
+import { log } from "util";
+import { useSoundPlayer } from "@/app/sound";
 
 export default function Page() {
        const ref = useRef<HTMLInputElement>(null);
-    
+       const{play} = useSoundPlayer();
+    const [layer,setLayer] = useState([])
         const [inputValue, setInputValue] = useState(0.01);
-      
+      const [step,setStep] = useState(0);
+      const [activeMine,setActiveMine] = useState(false);
+      const [activeGame,setActiveGame] = useState(false);
+      const [mained,setMained] = useState(false);
+      const [data,setData] = useState<any>();
+      const [showWin,setShowWin] = useState(false)
         const handleIncrease = () => {
           const newValue = parseFloat((inputValue + 0.01).toFixed(2));
           setInputValue(newValue);
@@ -19,6 +28,64 @@ export default function Page() {
             if (ref.current) ref.current.value = newValue.toString();
             }
           };
+
+const Mine = async()=> {
+  const data  =await axios.post('https://api.durowin.xyz/games/mine/play',{
+    "user_id":1,
+    "init_data":"0",
+    "ton_bet":inputValue
+  })
+if(data.data.result) {
+play('mineStart')
+setData(data.data)
+}
+setActiveGame(true)
+  setLayer(data.data.result.results)
+}
+
+useEffect(() => {
+ 
+if(activeGame == false) return
+  if (!layer || step >= 4) return;
+//  const tonCount = layer.filter((item: string) => item === "ton").length;
+ 
+ 
+ 
+  setActiveMine(true);
+
+  setTimeout(() => {
+    setActiveMine(false);
+
+    if (layer[step] === 'ton') {
+      play('mineTon');
+      setMained(true)
+    setActiveMine(false)
+    } else {
+      play('mineDirt');
+    }
+
+    setStep(prev => prev + 1);
+     if(step ==3) {
+      setStep(0)
+      setActiveGame(false)
+      if(data.result.ton_win >0) {
+      setShowWin(true)
+      }
+     }
+  }, 2000);
+}, [layer, step,activeGame]);
+useEffect(()=> {
+if(mained==true) {
+  setTimeout(() => {
+    setMained(false)
+  }, 1000);
+}
+if(showWin == true) {
+  setTimeout(() => {
+    setShowWin(false)
+  }, 2000);
+}
+},[mained,showWin])
     return(
         <>
         <div className="mine_container fixed left-0 top-0 w-full h-[100vh]   ">
@@ -27,15 +94,20 @@ export default function Page() {
             </div>
 
 
-<div className="flex w-full justify-between mt-[25px]">
+<div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto">
     <div className="relative"><img src={'/dirt1.png'}/>
     <div className="absolute bottom-[-15px]"><img src={'/man.png'}/></div>
-    <div className="absolute top-[10px] right-0 kirka" ><img  src={'/kirka.png'}/></div>
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
     </div>
     <div><img src={'/dirt2.png'}/></div>
 </div>
 
-
+<div className={`w-full flex items-center justify-center absolute left-[50%] translate-x-[-50%] translate-y-[20px] ${showWin==false &&'hidden'}`}><h1 className="flex items-center gap-[6px] font-[600] text-[20px]"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M27.548 9.62667L17.0867 26.2853C16.9587 26.4871 16.7817 26.6531 16.5721 26.7679C16.3626 26.8826 16.1274 26.9424 15.8885 26.9416C15.6496 26.9408 15.4148 26.8795 15.206 26.7633C14.9972 26.6471 14.8213 26.4799 14.6947 26.2773L4.43735 9.61867C4.14946 9.15235 3.99796 8.6147 4.00002 8.06667C4.01231 7.25708 4.34565 6.48552 4.92675 5.92168C5.50784 5.35784 6.28909 5.04789 7.09869 5.06H24.9147C26.6174 5.05867 28 6.4 28 8.05867C28 8.60934 27.8454 9.15334 27.548 9.62667ZM6.95735 9.06667L14.588 20.8347V7.88267H7.75469C6.96535 7.88267 6.61202 8.40534 6.95735 9.06934M17.4107 20.8373L25.044 9.06667C25.3974 8.404 25.036 7.88 24.2454 7.88H17.4134L17.4107 20.8373Z" fill="white"/>
+</svg>
++{showWin && data.result.ton_win}</h1></div>
             <div className="flex flex-col items-center gap-[23px] mt-[81px]     ">
             <div  className="mt-[2px] flex items-center gap-[16px] cursor-pointer fadeIn">
                 <div onClick={handleDicrement} style={{
@@ -54,7 +126,7 @@ export default function Page() {
 </svg>
 </div>
             </div>
-            <div className="fadeIn"><button className="spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">DIG</button></div>
+            <div className="fadeIn"><button onClick={Mine} className="spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">DIG</button></div>
             </div>
         </div>
         </>
