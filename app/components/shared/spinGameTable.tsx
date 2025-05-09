@@ -2,6 +2,7 @@
 
 import { useLoopSound, useSoundPlayer } from "@/app/sound";
 import { useBalanceStore, useLanguageStore } from "@/app/store";
+import { log } from "console";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 const ICONS = ['meat', 'tons', 'ice', 'airplane', 'cash', 'eggplant', 'palm'];
@@ -36,7 +37,7 @@ const [first,setFirst] = useState(true);
     const ref = useRef<HTMLInputElement>(null);
     const {language} = useLanguageStore();
     const [inputValue, setInputValue] = useState(0.01);
-    const {setBalance} = useBalanceStore();
+    const {setBalance,decreaseBalance} = useBalanceStore();
     const [spin, setSpin] = useState(false);
     const [columns, setColumns] = useState<string[][]>([[], [], []]);
     const [result, setResult] = useState<SpinResult | null>(null);
@@ -56,9 +57,11 @@ const {push} = useRouter();
       }
       setColumns(tempColumns);
     }, []);
-    const [isFirstSpin, setIsFirstSpin] = useState(true); // Флаг для отслеживания первого спина
+    const [isFirstSpin, setIsFirstSpin] = useState(true); 
 
     const startHold = () => {
+      if(isFirstSpin == true) return
+     if(active) return
       wasHeld.current = false;
       holdTimer.current = setTimeout(() => {
         wasHeld.current = true;
@@ -72,12 +75,14 @@ const {push} = useRouter();
   
     // Включаем автоставку
     const enableAutoSpin = () => {
+       if(isFirstSpin == true) return
       if (intervalId.current) return; // уже включена
       setAuto(true);
       intervalId.current = setInterval(() => {
-        if (!active) {
+        console.log('qaqem beynit');
+
           handleSpin();
-        }
+    
       }, 5000);
     };
   
@@ -114,14 +119,17 @@ const {push} = useRouter();
     
 
       if(inputValue < balance) {
-        if(auto == true) {
-          setTimeout(() => {
-            handleSpin()
-          }, 4000);
-        }
-        console.log('qaqem vret',balance -inputValue);
+        // if(auto == true) {
+        //   setTimeout(() => {
+        //     handleSpin()
+        //   }, 4000);
+        // }
         
-        setBalance(balance -inputValue);
+        
+   decreaseBalance(inputValue)
+        
+      
+       
         play('start')
       setSpin(false);
       setShowResult(false);
@@ -135,12 +143,9 @@ setTimeout(() => {
 }, 300);
  
   
-      // Оставляем только последние 3 значения (верхние) в каждой колонке
+
 const trimmedColumns = columns.map((col) => col.slice(-3));
-setColumns(trimmedColumns); // Сохраняем только верхние 3
-// Последние 3, т.е. верхние
-    
-      // Создаём рандомные 27 строк (27 значений: 3 колонки по 27)
+setColumns(trimmedColumns); 
       const tempColumns: string[][] = [[], [], []];
       for (let i = 0; i < 27; i++) {
         const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
@@ -151,11 +156,10 @@ setColumns(trimmedColumns); // Сохраняем только верхние 3
       const newColumns = isFirstSpin
       ? columns
       : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
-     // Добавляем новые для обычных спинов
-    
+
       setColumns(newColumns);
     
-      // После первого спина, обновляем флаг
+
       if (isFirstSpin) {
         setIsFirstSpin(false);
       }
@@ -172,7 +176,7 @@ setColumns(trimmedColumns); // Сохраняем только верхние 3
             ton_bet: inputValue,
           }),
         });
-    
+
         const data: SpinResult = await res.json();
       if(!data.result) {
 
@@ -232,7 +236,8 @@ setColumns(trimmedColumns); // Сохраняем только верхние 3
       play('noTon')
     }
     ;}
-    
+
+
     
     
   
@@ -268,19 +273,19 @@ setColumns(trimmedColumns); // Сохраняем только верхние 3
           const randomRotate = (Math.random() * 2) + 1; // от 1 до 3 оборотов
           img.style.setProperty('--random-rotate', randomRotate);
     
-          // Случайная задержка для разных изображений
+          
           const delay = Math.random() * 2;
           img.style.animationDelay = `${delay}s`;
         });
-      }, [isActive]); // Когда состояние активируется, анимация обновляется
+      }, [isActive]);
     
       const triggerAnimation = () => {
        
         
-        setIsActive(false); // Сбрасываем анимацию
+        setIsActive(false); 
         setTimeout(() => {
-          setIsActive(true); // Перезапускаем анимацию
-        }, 50); // С небольшой задержкой, чтобы дать браузеру время сбросить анимацию
+          setIsActive(true); 
+        }, 50); 
         setTimeout(() => {
           setIsActive(false)
         }, 6000);

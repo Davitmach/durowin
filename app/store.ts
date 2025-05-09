@@ -3,11 +3,16 @@ import { create } from 'zustand'
 interface BalanceStore {
   balance: number
   setBalance: (value: number) => void
+  decreaseBalance: (amount: number) => void;
 }
 
-export const useBalanceStore = create<BalanceStore>((set) => ({
+export const useBalanceStore = create<BalanceStore>((set,get) => ({
   balance: 0,
-  setBalance: (value) => set({ balance: value })
+  setBalance: (value) => set({ balance: value }),
+   decreaseBalance: (amount) => {
+    const current = get().balance;
+    set({ balance: current - amount });
+  },
 }))
 
 type Status = "Success" | "Process";

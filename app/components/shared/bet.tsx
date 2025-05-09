@@ -15,10 +15,11 @@ export const Bet = ()=> {
     const {language} = useLanguageStore();
     const {active:activeAv,setActive:SetA} = useAviableBetBlame()
     const {win,setWin}=useWinFlame()
+    const {play} = useSoundPlayer()
 const {setStart} = useStartGame();
 const ref = useRef<HTMLInputElement>(null);
 const ref2 =useRef(null)
-const {play} = useSoundPlayer()
+
 // useEffect(()=> {
 //   console.log(win);
   
@@ -79,6 +80,7 @@ const Bet = async()=> {
      setMap('')
      setGameTable([])
      SetA(false)
+     play('startFlame')
      
 
     }
