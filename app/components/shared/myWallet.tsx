@@ -28,46 +28,49 @@ export const MyWallet = () => {
     setOpen(true);
   };
 
-  const handleDeposit = async () => {
-    if (!ref.current) return;
-    const value = parseFloat(ref.current.value);
-    if (isNaN(value) || value < 0.01) return;
+const handleDeposit = async () => {
+  if (!ref.current) return;
 
-    try {
-      const addressResponse = await axios.get<string>(
-        "https://api.durowin.xyz/main_ton_address"
-      );
-      const mainAddress = addressResponse.data;
+  const rawInput = ref.current.value.replace(',', '.'); // заменим запятую на точку, если пользователь ввёл по-русски
+  const value = parseFloat(rawInput);
+  if (isNaN(value) || value < 0.25) return;
 
-      const tonAmount = parseFloat(ref.current.value); // сумма в TON
-const userId = 1; // вставь реального юзера
+  try {
+    const addressResponse = await axios.get<string>("https://api.durowin.xyz/main_ton_address");
+    const mainAddress = addressResponse.data;
 
-const comment = `${userId}`;
-const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
-const payload = `0x${commentHex}`;
+    const nanoAmount = BigInt(Math.floor(value * 1e9)).toString(); // безопасное преобразование в строку без экспоненты
 
-const transaction: SendTransactionRequest = {
-  validUntil: Math.floor(Date.now() / 1000) + 5 * 60, // важно: timestamp в секундах!
-  messages: [
-    {
-      address: mainAddress, // адрес с бекенда
-      amount: (tonAmount * 1e9).toFixed(0), // в нанотонах, как строка
-      payload: payload, // hex-комментарий
-    },
-  ],
+    const userId = 1;
+    const comment = `${userId}`;
+    const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
+    const payload = `0x${commentHex}`;
+
+    const transaction: SendTransactionRequest = {
+      validUntil: Math.floor(Date.now() / 1000) + 5 * 60,
+      messages: [
+        {
+          address: mainAddress,
+          amount: nanoAmount,
+          payload: payload,
+        },
+      ],
+    };
+
+    const result = await tonConnectUI.sendTransaction(transaction);
+
+    await axios.post("https://api.durowin.xyz/deposits/verify", {
+      user_id: userId,
+      txn_hash: result.boc,
+      ton_amount: value,
+      init_data: "",
+    });
+  } catch (err) {
+    console.error("Deposit error:", err);
+  }
 };
-      const result = await tonConnectUI.sendTransaction(transaction);
 
-      await axios.post("https://api.durowin.xyz/deposits/verify", {
-        user_id: 1, // Заменить на реальный ID
-        txn_hash: result.boc,
-        ton_amount: value,
-        init_data: ""
-      });
-    } catch (err) {
-      console.error("Deposit error:", err);
-    }
-  };
+
 
   return (
     <>
@@ -118,7 +121,7 @@ const transaction: SendTransactionRequest = {
               </div>
             )}
 
-            <div className="relative">
+            <div className="relative pb-[0px]">
               <input
                 ref={ref}
                 className="ton_input w-full !pl-[45px]"
@@ -137,11 +140,13 @@ const transaction: SendTransactionRequest = {
                   fill="white"
                 />
               </svg>
+               <h1 className='absolute right-0 text-[13px] text-[#999999]'>{language=='eng'? 'min 0.25':'минимум 0.25'}</h1>
             </div>
 
             <button
               onClick={handleDeposit}
-              className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer"
+           
+              className="mt-[15px] outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer"
             >
               {language === "eng" ? "Deposit" : "Пополнить"}
             </button>
