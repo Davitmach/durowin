@@ -1,13 +1,15 @@
 'use client';
-
+import { beginCell, storeStateInit } from '@ton/core'
 import { useBalanceStore, useLanguageStore } from "@/app/store";
 import {
   SendTransactionRequest,
   TonConnectButton,
   useTonAddress,
-  useTonConnectUI
+  useTonConnectUI,
+  
 } from "@tonconnect/ui-react";
 import axios from "axios";
+
 import { useEffect, useRef, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import SlotCounter from "react-slot-counter";
@@ -42,10 +44,11 @@ const handleDeposit = async () => {
     const nanoAmount = BigInt(Math.floor(value * 1e9)).toString(); // безопасное преобразование в строку без экспоненты
 
 
-    const userId = 1;
-    const comment = `${userId}`;
-    const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
-    const payload = `0x${commentHex}`;
+    const userId = '1';
+const stateInit = beginCell()
+    .storeUint(0,32)
+    .storeStringTail(userId)
+    .endCell();
 
     const transaction: SendTransactionRequest = {
  validUntil: Date.now() + 5 * 60 * 1000, 
@@ -53,7 +56,7 @@ const handleDeposit = async () => {
         {
           address: mainAddress,
           amount: nanoAmount,
-          payload: payload,
+          payload: stateInit.toBoc().toString("base64"),
         },
       ],
     };
