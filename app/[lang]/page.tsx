@@ -48,8 +48,10 @@ export default function Home() {
         }
       }
     };
-
-    fetchBalance();
+setTimeout(() => {
+  fetchBalance();
+}, 1000);
+    
   }, [setBalance]);
   return (
 <div>
