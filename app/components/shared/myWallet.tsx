@@ -17,7 +17,7 @@ console.log(userWalletAddress);
 
     },[userWalletAddress])
     const HandleClick = ()=> {
-        if(userWalletAddress == null) {
+        if(userWalletAddress.length==0) {
             tonConnectUI.openModal()
         }
         else {
