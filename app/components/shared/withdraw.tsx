@@ -2,9 +2,48 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useBalanceStore, useLanguageStore } from '@/app/store';
+import { useBalanceStore, useLanguageStore, useTransactionStore } from '@/app/store';
 
 export const Withdraw = () => {
+    const setWithdrawals = useTransactionStore((s) => s.setWithdrawals);
+ const fetchWithdrawals = async () => {
+      try {
+        const res = await fetch("https://api.durowin.xyz/withdraws/get_user_list/1/1");
+        const data = await res.json();
+
+        if (data?.detail === "Too Many Requests") {
+          const cached = localStorage.getItem("withdrawals");
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            setWithdrawals(parsed);
+            console.warn("Выводы: лимит запросов. Использован кэш.");
+          }
+          return;
+        }
+
+        const mapped = data.map((item: any) => ({
+          type: "Withdraw",
+          status: item.status === "process"
+          ? "Process"
+          : item.status === "cancelled"
+          ? "Cancelled"
+          : "Success",
+          amount: item.ton_amount,
+          date: new Date().toLocaleTimeString(),
+        }));
+
+        setWithdrawals(mapped);
+        localStorage.setItem("withdrawals", JSON.stringify(mapped));
+      } catch (e) {
+        console.error("Ошибка при загрузке выводов:", e);
+        const cached = localStorage.getItem("withdrawals");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          setWithdrawals(parsed);
+          console.warn("Ошибка при запросе. Использован кэш выводов.");
+        }
+      }
+    };
   const [amount, setAmount] = useState('');
   const {decreaseBalance} = useBalanceStore()
   const [address, setAddress] = useState('');
@@ -25,6 +64,7 @@ const {language} = useLanguageStore();
      console.log(data.data);
      if(data.data.status == 'process') {
       decreaseBalance(parseFloat(amount))
+      fetchWithdrawals()
      }
      
       setAmount('');
