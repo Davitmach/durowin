@@ -31,8 +31,8 @@ export const MyWallet = () => {
 const handleDeposit = async () => {
   if (!ref.current) return;
 
-  const rawInput = ref.current.value.replace(',', '.'); // заменим запятую на точку, если пользователь ввёл по-русски
-  const value = parseFloat(rawInput);
+//   const rawInput = ref.current.value.replace(',', '.'); // заменим запятую на точку, если пользователь ввёл по-русски
+  const value = Number(ref.current.value);
   if (isNaN(value) || value < 0.25) return;
 
   try {
@@ -47,7 +47,7 @@ const handleDeposit = async () => {
     const payload = `0x${commentHex}`;
 
     const transaction: SendTransactionRequest = {
-      validUntil: Math.floor(Date.now() / 1000) + 5 * 60,
+ validUntil: Date.now() + 5 * 60 * 1000, 
       messages: [
         {
           address: mainAddress,
