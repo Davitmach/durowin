@@ -64,7 +64,9 @@ padding: 13.5px 16px;
   pointer-events: none; /* чтобы клик проходил сквозь псевдоэлемент */
 }
 
-
+button {
+  outline: none;
+}
 /// bet 
 .bet_container input,.deposit_box input {
   border-top: 1px solid #381CB280;

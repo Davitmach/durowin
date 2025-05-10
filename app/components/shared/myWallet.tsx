@@ -28,11 +28,38 @@ console.log(userWalletAddress);
             
         }
     }
-    const Dep = ()=> {
+    const Dep = async()=> {
         if(ref.current) {
             if(typeof ref.current.value !== 'number' ) return;
             if(ref.current.value < 0.01) return 
             console.log('qaqem vret');
+            const address = await axios.get<any,any>('https://api.durowin.xyz/main_ton_address');
+            console.log(address);
+             const comment = `Deposit from user ${1}`;
+      const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
+      const payload = `0x${commentHex}`;
+
+      // 3. Отправить транзакцию
+      const amountNano = (parseFloat(ref.current.value) * 1e9).toString();
+      const tx = await tonConnectUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 600,
+        messages: [
+          {
+            address: address,
+            amount: amountNano,
+            payload,
+          },
+        ],
+      });
+const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
+        
+      
+          user_id: 1,
+          txn_hash: tx.boc, 
+          ton_amount: parseFloat(ref.current.value),
+          init_data: '',
+    
+      });
             
         }
     }
@@ -66,7 +93,7 @@ console.log(userWalletAddress);
             <path d="M17.661 4.22L9.81501 16.714C9.71904 16.8653 9.58627 16.9898 9.42911 17.0759C9.27195 17.162 9.09554 17.2068 8.91636 17.2062C8.73717 17.2056 8.56107 17.1596 8.40449 17.0725C8.24792 16.9853 8.11598 16.8599 8.02102 16.708L0.328016 4.214C0.112094 3.86425 -0.00153249 3.46102 1.56103e-05 3.05C0.00922894 2.4428 0.259239 1.86413 0.695059 1.44125C1.13088 1.01837 1.71682 0.785909 2.32402 0.794995H15.686C16.963 0.793995 18 1.8 18 3.044C18 3.457 17.884 3.865 17.661 4.22ZM2.21802 3.8L7.94102 12.626V2.912H2.81602C2.22402 2.912 1.95902 3.304 2.21802 3.802M10.058 12.628L15.783 3.8C16.048 3.303 15.777 2.91 15.184 2.91H10.06L10.058 12.628Z" fill="white" />
           </svg>
         </div>
-        <button className="bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng' ?'Deposit':'Пополнить'}</button>
+        <button onClick={Dep} className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng' ?'Deposit':'Пополнить'}</button>
       </div>
         </div>}
         </>
