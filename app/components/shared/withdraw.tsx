@@ -86,7 +86,7 @@ const {language} = useLanguageStore();
           <input
             className="ton_input w-full"
             type="text"
-            placeholder="30.00"
+            placeholder="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
