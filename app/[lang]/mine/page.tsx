@@ -15,16 +15,18 @@ export default function Page() {
   const [showWin, setShowWin] = useState(false);
   const [gameStart, setGameStart] = useState(false);
   const [blockTypes, setBlockTypes] = useState<('ton' | 'dirt')[]>([]);
-
+const [opened,setOpen] = useState(0);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
 
   const handleIncrease = () => {
+    if(gameStart == true) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
     setInputValue(newValue);
     if (ref.current) ref.current.value = newValue.toString();
   };
 
   const handleDicrement = () => {
+    if(gameStart == true) return
     if (inputValue > 0.01) {
       const newValue = parseFloat((inputValue - 0.01).toFixed(2));
       setInputValue(newValue);
@@ -33,6 +35,7 @@ export default function Page() {
   };
 
   const Mine = async () => {
+    if(gameStart ==true) return
     setShowWin(false);
     setGameStart(false);
     setData(null);
@@ -71,20 +74,71 @@ export default function Page() {
     }
   }, [showWin]);
 
+      useEffect(() => {
+    const fetchBalance = async () => {
+      
+      try {
+        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
+
+        if (response.data?.detail === "Too Many Requests") {
+          const savedBalance = localStorage.getItem("ton_balance");
+          if (savedBalance !== null) {
+            setBalance(parseFloat(savedBalance));
+       
+          }
+    
+        } else {
+          
+          
+          const balance = response?.data?.ton_balance;
+          
+          
+          if (typeof balance === "number") {
+            localStorage.setItem("ton_balance", balance.toString());
+            setBalance(balance);
+          }
+        }
+
+  
+      } catch (error) {
+       
+        const cached = localStorage.getItem("ton_balance");
+        
+        
+        if (cached !== null) {
+
+          setBalance(parseFloat(cached));
+          console.warn("Ошибка запроса. Использован кэш:", cached);
+        }
+      }
+    };
+
+    fetchBalance();
+  }, [setBalance]);
+  useEffect(()=> {
+if(opened ==9 && gameStart ==true) {
+  setTimeout(() => {
+  setOpen(0);
+  setGameStart(false)    
+  }, 2000);
+
+}
+
+  },[opened])
   return (
     <>
-      <div className=" max-w-[400px]   mine_container w-full h-[100vh] mb-[180px]">
+      <div className=" max-w-[400px]   mine_container w-full h-[100vh] mb-[20px]">
         <div className="w-full flex justify-center">
           <Balance />
         </div>
 
-        <div className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
+        <div style={{justifyItems:'center'}} className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
           {blockTypes.map((type, index) => (
-            <MineBlock showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
+            <MineBlock setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
           ))}
         </div>
 
-        <div className={`w-full flex items-center justify-center absolute left-[50%] translate-x-[-50%] translate-y-[20px] ${showWin == false && 'hidden'}`}>
+        <div className={`w-full flex items-center justify-center absolute left-[50%] translate-x-[-50%] translate-y-[10px] ${showWin == false && 'hidden'}`}>
           <h1 className="flex items-center gap-[6px] font-[600] text-[20px]">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M27.548 9.62667L17.0867 26.2853C16.9587 26.4871 16.7817 26.6531 16.5721 26.7679C16.3626 26.8826 16.1274 26.9424 15.8885 26.9416C15.6496 26.9408 15.4148 26.8795 15.206 26.7633C14.9972 26.6471 14.8213 26.4799 14.6947 26.2773L4.43735 9.61867C4.14946 9.15235 3.99796 8.6147 4.00002 8.06667C4.01231 7.25708 4.34565 6.48552 4.92675 5.92168C5.50784 5.35784 6.28909 5.04789 7.09869 5.06H24.9147C26.6174 5.05867 28 6.4 28 8.05867C28 8.60934 27.8454 9.15334 27.548 9.62667ZM6.95735 9.06667L14.588 20.8347V7.88267H7.75469C6.96535 7.88267 6.61202 8.40534 6.95735 9.06934M17.4107 20.8373L25.044 9.06667C25.3974 8.404 25.036 7.88 24.2454 7.88H17.4134L17.4107 20.8373Z" fill="white" />
@@ -93,7 +147,7 @@ export default function Page() {
           </h1>
         </div>
 
-        <div className="flex flex-col items-center gap-[23px] mt-[81px]">
+        <div className="flex flex-col items-center gap-[23px] mt-[60px]">
           <div className="mt-[2px] flex items-center gap-[16px] cursor-pointer fadeIn">
             <div onClick={handleDicrement} style={{ opacity: inputValue > 0.01 ? '1' : '0.5' }} className="w-[32px] h-[32px] flex items-center justify-center rounded-[8px] bg-[#FFFFFF]">
               <svg width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,7 +174,7 @@ export default function Page() {
             </div>
           </div>
           <div className="fadeIn">
-            <button onClick={Mine} className="spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">DIG</button>
+            <button onClick={Mine} className="spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
           </div>
         </div>
       </div>

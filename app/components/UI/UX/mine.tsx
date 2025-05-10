@@ -7,6 +7,9 @@ interface IMineBlock {
   type: 'dirt' | 'ton';
   gameStart: boolean;
   showWin: React.Dispatch<React.SetStateAction<boolean>>; // Передаем setShowWin
+  setStart:React.Dispatch<React.SetStateAction<boolean>>;
+  setOpened:React.Dispatch<React.SetStateAction<number>>;
+
 }
 
 export const MineBlock = (props: IMineBlock) => {
@@ -16,7 +19,7 @@ export const MineBlock = (props: IMineBlock) => {
   // Обработчик клика
   const handleClick = () => {
     if (!props.gameStart || exploded) return; // Блок не должен взрываться, если уже взорван
-
+props.setOpened((prev)=> prev+1)
     setExploded(true); // Отметим блок как взорванный
     if (props.type === 'dirt') {
       play('mineDirt'); // Звук для грязи
@@ -37,7 +40,7 @@ export const MineBlock = (props: IMineBlock) => {
 
   return (
     <div
-      className={`${props.gameStart && !exploded && 'shake-animation'} aspect-square w-full flex items-center justify-center rounded-[16px] relative overflow-visible cursor-pointer`}
+      className={`${props.gameStart && !exploded && 'shake-animation'} aspect-square w-[80%] flex items-center justify-center rounded-[16px] relative overflow-visible cursor-pointer`}
       onClick={handleClick}
     >
       <div className={`bg-white z-[9999] w-full h-full flex items-center justify-center rounded-[16px] ${exploded ? "explode-animation" : ""}`}>

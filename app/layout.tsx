@@ -125,8 +125,8 @@ export default function RootLayout({
 </svg>
 <Provider>
         <div className="container z-[99999] mx-[20px]  ">
-  
-<GetBalance/>
+{/*   
+<GetBalance/> */}
 <TransactionLoader/>
 <LanguageInitializer/>
         {children}
