@@ -151,6 +151,7 @@ else if(step ==5) {
     setMained(true)
    setTimeout(() => {
     setShowWin(true);
+    setBalance(data.balance)
    }, 1000);
       setTimeout(() => {
     setTranslate(6);  
@@ -166,6 +167,7 @@ else if(step==6) {
   setShowWin(false)
   setStep(0)
   setMained(false)
+  
 }
 },[layer,step])
     return(
