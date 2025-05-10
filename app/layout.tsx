@@ -124,7 +124,7 @@ export default function RootLayout({
 </g>
 </svg>
 <Provider>
-        <div className="container z-[99999] mx-[20px] ">
+        <div className="container z-[99999] mx-[20px]  ">
   
 <GetBalance/>
 <TransactionLoader/>

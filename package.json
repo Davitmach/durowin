@@ -10,13 +10,19 @@
   },
   "dependencies": {
     "@tonconnect/ui-react": "^2.1.0",
+    "@tsparticles/engine": "^3.8.1",
+    "@tsparticles/plugin-emitters": "^3.8.1",
+    "@tsparticles/shape-circle": "^3.8.1",
     "axios": "^1.9.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-slot-counter": "^3.3.1",
+    "react-tsparticles": "^2.12.2",
     "sass": "^1.87.0",
+    "tsparticles": "^3.8.1",
+    "tsparticles-preset-fireworks": "^2.12.0",
     "zustand": "^5.0.4"
   },
   "devDependencies": {

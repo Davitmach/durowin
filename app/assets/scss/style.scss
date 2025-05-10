@@ -234,10 +234,7 @@ z-index: 3;
 
 /// mine
 .mine_container {
-  background-image: url('/dirt.png');
-  background-repeat: no-repeat;
-  background-size: 100%  120%;
-  background-position: 0px -40px;
+
 }
 @keyframes swingPickaxe {
   0% { transform: rotate(0deg) translateX(-30px); }
@@ -324,4 +321,43 @@ z-index: 3;
   100% {
     transform: rotate(calc(360deg * var(--random-rotate)));
   }
+}
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 1;
+  }
+}
+
+.explode-animation {
+  animation: explode 0.5s ease-in-out forwards;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0) translateY(0) ;
+  }
+  25% {
+    transform: translateX(-1px) translateY(0px) ; /* Сдвиг и небольшой угол */
+  }
+  50% {
+    transform: translateX(1px) translateY(0px) ; /* Сдвиг и небольшой угол */
+  }
+  75% {
+    transform: translateX(-1px) translateY(0px) ; /* Сдвиг и небольшой угол */
+  }
+  100% {
+    transform: translateX(0) translateY(0) ;
+  }
+}
+
+.shake-animation {
+  animation: shake 0.5s ease-in-out infinite;
 }
