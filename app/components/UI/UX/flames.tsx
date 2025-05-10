@@ -25,8 +25,8 @@ const {initData,id:userId} = UserData();
 const Click = async()=> {
   if(active == false) return 
   axios.post('https://api.durowin.xyz/games/flames/click',{
-    "init_data": initData,
-  "user_id": userId,
+    "init_data": window.Telegram.WebApp.initData,
+  "user_id": window.Telegram.WebApp.initDataUnsafe.user.id,
   "room_id": id,
   "click_index": props.index
 

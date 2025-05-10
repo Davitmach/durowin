@@ -34,8 +34,8 @@ const Claim = async()=> {
 if(gameTable.length==0)return
 
   axios.post('https://api.durowin.xyz/games/flames/claim',{
-    "init_data": initData,
-    "user_id": userId,
+    "init_data": window.Telegram.WebApp.initData,
+    "user_id": window.Telegram.WebApp.initDataUnsafe.user.id,
     "room_id": id
   }
   ).then((res)=> {
@@ -62,8 +62,8 @@ const Bet = async()=> {
   if(ref.current ) {
     if(ref.current.value < '0.01') return
   axios.post('https://api.durowin.xyz/games/flames/create',{
-    "init_data":initData,
-    "user_id": userId,
+    "init_data":window.Telegram.WebApp.initData,
+    "user_id": window.Telegram.WebApp.initDataUnsafe.user.id,
     "ton_bet": Number(ref.current?.value),
     "flames_count": flames
   }

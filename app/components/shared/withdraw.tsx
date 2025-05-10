@@ -57,8 +57,8 @@ const {language} = useLanguageStore();
 
     try {
      const data= await axios.post('https://api.durowin.xyz/withdraws/create', {
-        init_data: initData,
-        user_id: id,
+        init_data: window.Telegram.WebApp.initData,
+        user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
         to_address: address,
         ton_amount: parseFloat(amount),
       })
