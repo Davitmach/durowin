@@ -43,12 +43,12 @@ console.log(userWalletAddress);
       const payload = `0x${commentHex}`;
 
       // 3. Отправить транзакцию
-      const amountNano = (parseFloat(ref.current.value) * 1e9).toString();
+ 
       const transaction: SendTransactionRequest = {
         validUntil: Date.now() + 5 * 60 * 1000,
         messages: [
           {
-            address: 'UQDwAUooz2Li8vRqNO73ADEUw0ZtVnxw6YVgQhV-kRVIaMD0',
+            address: address.data,
             amount: '0.01',
             payload: '1',
             
