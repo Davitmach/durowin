@@ -16,7 +16,8 @@ export default function Page() {
       const [activeGame,setActiveGame] = useState(false);
       const [mained,setMained] = useState(false);
       const [data,setData] = useState<any>();
-      const [showWin,setShowWin] = useState(false)
+      const [showWin,setShowWin] = useState(false);
+      const [translate,setTranslate] = useState(0);
       const {decreaseBalance,setBalance} = useBalanceStore();
         const handleIncrease = () => {
           const newValue = parseFloat((inputValue + 0.01).toFixed(2));
@@ -46,50 +47,127 @@ setActiveGame(true)
   setLayer(data.data.result.results)
 }
 
-useEffect(() => {
- 
-if(activeGame == false) return
-  if (!layer || step >= 4) return;
-//  const tonCount = layer.filter((item: string) => item === "ton").length;
- 
- 
- 
-  setActiveMine(true);
-
-  setTimeout(() => {
-    setActiveMine(false);
-
-    if (layer[step] === 'ton') {
-      play('mineTon');
-      setMained(true)
-    setActiveMine(false)
-    } else {
-      play('mineDirt');
-    }
-
-    setStep(prev => prev + 1);
-     if(step ==3) {
-      setStep(0)
-      setActiveGame(false)
-      setBalance(data.balance)
-      if(data.result.ton_win >0) {
-      setShowWin(true)
-      }
-     }
-  }, 2000);
-}, [layer, step,activeGame]);
 useEffect(()=> {
-if(mained==true) {
+if(step == 0 && layer.length>0) {
+  setActiveMine(true)
   setTimeout(() => {
-    setMained(false)
-  }, 1000);
-}
-if(showWin == true) {
-  setTimeout(() => {
-    setShowWin(false)
+    setActiveMine(false)
+    play('mineDirt')
+    setMained(true)
+ 
+    setTimeout(() => {
+    setTranslate(1);  
+    setStep(prev=>prev+1)    
+    }, 1000);
+  
   }, 2000);
 }
-},[mained,showWin])
+else if(step==1){
+  setMained(false);
+  setActiveMine(true)
+   setTimeout(() => {
+    setActiveMine(false)
+    play('mineDirt')
+    setMained(true)
+   
+      setTimeout(() => {
+    setTranslate(2);  
+    setStep(prev=>prev+1)    
+    }, 1000);
+  
+  }, 2000);
+}
+else if(step ==2) {
+  setMained(false);
+  setActiveMine(true)
+   setTimeout(() => {
+    setActiveMine(false)
+    if(layer[0] =='dirt') {
+    play('mineDirt')
+    }
+    else {
+      play('mineTon')
+    }
+    setMained(true)
+   
+      setTimeout(() => {
+    setTranslate(3);  
+    setStep(prev=>prev+1)    
+    }, 1000);
+  
+  }, 2000);
+}
+else if(step ==3) {
+  setMained(false);
+  setActiveMine(true)
+   setTimeout(() => {
+    setActiveMine(false)
+    if(layer[1] =='dirt') {
+    play('mineDirt')
+    }
+    else {
+      play('mineTon')
+    }
+    setMained(true)
+   
+      setTimeout(() => {
+    setTranslate(4);  
+    setStep(prev=>prev+1)    
+    }, 1000);
+  
+  }, 2000);
+}
+else if(step ==4) {
+  setMained(false);
+  setActiveMine(true)
+   setTimeout(() => {
+    setActiveMine(false)
+    if(layer[2] =='dirt') {
+    play('mineDirt')
+    }
+    else {
+      play('mineTon')
+    }
+    setMained(true)
+   
+      setTimeout(() => {
+    setTranslate(5);  
+    setStep(prev=>prev+1)    
+    }, 1000);
+  
+  }, 2000);
+}
+else if(step ==5) {
+  setMained(false);
+  setActiveMine(true)
+   setTimeout(() => {
+    setActiveMine(false)
+    if(layer[3] =='dirt') {
+    play('mineDirt')
+    }
+    else {
+      play('mineTon')
+    }
+    setMained(true)
+   setTimeout(() => {
+    setShowWin(true);
+   }, 1000);
+      setTimeout(() => {
+    setTranslate(6);  
+    setStep(prev=>prev+1)    
+    }, 3000);
+  
+  }, 2000);
+  
+}
+else if(step==6) {
+  setTranslate(0)
+  setLayer([]);
+  setShowWin(false)
+  setStep(0)
+  setMained(false)
+}
+},[layer,step])
     return(
         <>
         <div className="mine_container fixed left-0 top-0 w-full h-[100vh]   ">
@@ -98,14 +176,66 @@ if(showWin == true) {
             </div>
 
 
-<div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto">
+<div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto overflow-x-hidden">
+  <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto  duration-[400ms] " style={{
+    transform:`translate(-${translate*100}%)`
+  }} >
+  <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
     <div className="relative"><img src={'/dirt1.png'}/>
-    <div className="absolute bottom-[-15px]"><img src={'/man.png'}/></div>
+    
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+
+    <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
+    </div>
+    <div><img src={'/dirt1.png'}/></div>
+    </div>
+      <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
+    <div className="relative"><img src={'/dirt1.png'}/>
+    
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+      <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
+    </div>
+    <div><img src={'/dirt1.png'}/></div>
+    </div>
+      <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
+    <div className="relative"><img src={'/dirt1.png'}/>
+    
     <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
     <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
     <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
     </div>
-    <div><img src={'/dirt2.png'}/></div>
+    <div><img src={`/dirt${layer && layer[0] == 'dirt'? '1': '2'}.png`}/></div>
+    </div>
+      <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
+    <div className="relative"><img src={'/dirt1.png'}/>
+    
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
+    </div>
+    <div><img src={`/dirt${layer && layer[1] == 'dirt'? '1': '2'}.png`}/></div>
+    </div>
+      <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
+    <div className="relative"><img src={'/dirt1.png'}/>
+    
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
+    </div>
+    <div><img src={`/dirt${layer && layer[2] == 'dirt'? '1': '2'}.png`}/></div>
+    </div>
+      <div className="flex w-full justify-between mt-[25px] max-w-[471px] mx-auto shrink-0">
+    <div className="relative"><img src={'/dirt1.png'}/>
+    
+    <div className={`absolute top-0 left-[80%] w-full dirt_ton1 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-0 left-[125%] w-full dirt_ton2 ${mained ==false &&'hidden'}`}><img src={'/dirt1.png'}/></div>
+    <div className={`absolute top-[10px] right-0 kirka ${activeMine &&'kirka_active'} `}><img  src={'/kirka.png'}/></div>
+    </div>
+    <div><img src={`/dirt${layer && layer[3] == 'dirt'? '1': '2'}.png`}/></div>
+    </div>
+    </div>
 </div>
 
 <div className={`w-full flex items-center justify-center absolute left-[50%] translate-x-[-50%] translate-y-[20px] ${showWin==false &&'hidden'}`}><h1 className="flex items-center gap-[6px] font-[600] text-[20px]"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
