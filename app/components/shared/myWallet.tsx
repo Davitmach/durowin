@@ -1,7 +1,7 @@
 'use client';
 
 import { useBalanceStore, useLanguageStore } from "@/app/store";
-import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
+import { TonConnectButton, useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
@@ -20,13 +20,13 @@ console.log(userWalletAddress);
 
     },[userWalletAddress])
     const HandleClick = ()=> {
-        if(userWalletAddress.length==0) {
-            tonConnectUI.openModal()
-        }
-        else {
+        // if(userWalletAddress.length==0) {
+            // tonConnectUI.openModal()
+        // }
+        // else {
             setOpen(true)
             
-        }
+        // }
     }
     const Dep = async()=> {
         if(ref.current) {
@@ -78,6 +78,7 @@ const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
       {open && <div className="fixed w-full px-[20px] h-[100vh] bg-black/40 left-0 top-0 z-[999999999] flex items-center justify-center">
       <div className="max-w-[400px] deposit_box w-full p-[30px] bg-[#260e53] rounded-[16px] flex flex-col gap-[16px] relative">
         <FaXmark onClick={()=> setOpen(false)} className="text-[20px] absolute top-[10px] right-[10px] cursor-pointer"/>
+      {userWalletAddress.length==0 && <div className="flex justify-center"><TonConnectButton /></div>}
        <div className="relative ">
 
           <input 
@@ -94,6 +95,11 @@ const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
           </svg>
         </div>
         <button onClick={Dep} className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng' ?'Deposit':'Пополнить'}</button>
+      {userWalletAddress.length>0 &&
+      <button onClick={()=> {
+        tonConnectUI.disconnect()
+      }}>{language=='eng'?'Disconnect Wallet' :'Отключить кошелек'}</button>
+      }
       </div>
         </div>}
         </>
