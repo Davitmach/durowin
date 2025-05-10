@@ -41,8 +41,10 @@ export const GetBalance = () => {
         }
       }
     };
-
-    fetchBalance();
+setInterval(() => {
+   fetchBalance();
+}, 15000);
+   
   }, [setBalance]);
 
   return null;

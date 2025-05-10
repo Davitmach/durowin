@@ -1,5 +1,5 @@
 'use client';
-import { beginCell, storeStateInit } from '@ton/core'
+import { beginCell, Cell, storeStateInit } from '@ton/core'
 import { useBalanceStore, useLanguageStore } from "@/app/store";
 import {
   SendTransactionRequest,
@@ -21,6 +21,7 @@ export const MyWallet = () => {
   const userWalletAddress = useTonAddress();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
+  const [show,setShow] = useState(false);
 
   useEffect(() => {
     console.log(userWalletAddress);
@@ -60,29 +61,36 @@ const handleDeposit = async () => {
 
     const result = await tonConnectUI.sendTransaction(transaction);
 
-    // После выполнения транзакции делаем POST запрос для верификации
-    await axios.post("https://api.durowin.xyz/deposits/verify", {
-      user_id: userId,
-      txn_hash: result.boc,
-      ton_amount: value,
-      init_data: "",
-    });
 
-    // После успешной верификации перенаправляем или показываем сообщение
+    
+
+
     setOpen(false); // Закрыть модальное окно
-    // Можешь добавить здесь другие действия, например, уведомление о успешном депозите
-    alert('Deposit successful!'); // Пример уведомления
+    
+    setShow(true)
+    
+  
   } catch (err) {
     console.error("Deposit error:", err);
-    alert('Deposit failed!'); // Пример уведомления об ошибке
+   
   }
 };
 
 
 
-
+useEffect(()=> {
+if(show ==true) {
+  setTimeout(() => {
+  setShow(false)  
+  }, 5000);
+  
+}
+},[show])
   return (
     <>
+    {show &&
+    <div className='fadeIn bg-[#742cf1] rounded-[12px] p-[10px] flex items-center justify-center text-[19px] fixed max-w-[400px] top-[20px] w-full z-[99999999] shadow-xl '>Ваши средства поступят через минуту</div>
+    }
       <div className="fadeIn bg-[#260E53] rounded-[32px] py-[16px] flex flex-col items-center gap-[20px] px-[16px] mt-[24px]">
         <div>
           <h1 className="text-[#FFFFFF] font-[700] text-[22px]">
@@ -126,7 +134,8 @@ const handleDeposit = async () => {
 
             {userWalletAddress.length === 0 && (
               <div className="flex justify-center">
-                <TonConnectButton />
+                {/* <TonConnectButton /> */}
+                <button onClick={()=> tonConnectUI.openModal()} className='mt-[15px] outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer'>Connect Wallet</button>
               </div>
             )}
 
