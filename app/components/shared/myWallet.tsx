@@ -76,7 +76,7 @@ const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
       
         </div>
       {open && <div className="fixed w-full px-[20px] h-[100vh] bg-black/40 left-0 top-0 z-[999999999] flex items-center justify-center">
-      <div className="max-w-[400px] deposit_box w-full p-[30px] bg-[#260e53] rounded-[16px] flex flex-col gap-[16px] relative">
+      <div className="fadeIn max-w-[400px] deposit_box w-full p-[30px] bg-[#260e53] rounded-[16px] flex flex-col gap-[16px] relative">
         <FaXmark onClick={()=> setOpen(false)} className="text-[20px] absolute top-[10px] right-[10px] cursor-pointer"/>
       {userWalletAddress.length==0 && <div className="flex justify-center"><TonConnectButton /></div>}
        <div className="relative ">
