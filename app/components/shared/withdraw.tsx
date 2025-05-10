@@ -76,7 +76,7 @@ const {language} = useLanguageStore();
   };
 
   return (
-    <div className="fadeIn withdraw_container bg-[#260E53] rounded-[32px] mt-[20px] py-[20px] px-[16px] flex flex-col items-center gap-[16px]">
+    <div className="fadeIn withdraw_container bg-[#260E53] rounded-[32px] mt-[20px] py-[20px] mb-[100px] px-[16px] flex flex-col items-center gap-[16px]">
       <div>
         <h1 className="text-[20px] text-[#FFFFFF] font-[700]">{language=='eng'?'Withdraw' :'Вывод'} (TON)</h1>
       </div>
