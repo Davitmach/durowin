@@ -1,10 +1,5 @@
 {
-  "url": "https://durowin.vercel.app",  
-  "name": "Durowin",
-  "iconUrl": "https://durowin.vercel.app/logo.jpg",
-  "webApp": {
-    "start_url": "/ru", 
-    "display": "standalone",
-    "scope": "/"
-  }
+    "url": "https://durowin.vercel.app/ru",
+    "name": "Durowin",
+    "iconUrl": "https://durowin.vercel.app/logo.jpg"
 }
