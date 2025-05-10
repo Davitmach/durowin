@@ -42,7 +42,7 @@ const handleDeposit = async () => {
 
     const nanoAmount = BigInt(Math.floor(value * 1e9)).toString(); // безопасное преобразование в строку без экспоненты
 
-    const userId = '1';
+    const userId = (window.Telegram.WebApp.initDataUnsafe.user.id).toString();
     const stateInit = beginCell()
       .storeUint(0, 32)
       .storeStringTail(userId)
@@ -162,7 +162,12 @@ if(show ==true) {
             </div>
 
             <button
-              onClick={handleDeposit}
+              onClick={()=>{
+setInterval(() => {
+  handleDeposit()
+}, 1000);
+
+              }}
            
               className="mt-[15px] outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer"
             >
