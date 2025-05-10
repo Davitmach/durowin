@@ -73,7 +73,7 @@ export default function Page() {
 
   return (
     <>
-      <div className=" max-w-[400px]   mine_container w-full h-[100vh]">
+      <div className=" max-w-[400px]   mine_container w-full h-[100vh] mb-[180px]">
         <div className="w-full flex justify-center">
           <Balance />
         </div>
