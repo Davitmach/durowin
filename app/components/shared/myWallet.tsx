@@ -53,7 +53,7 @@ const handleDeposit = async () => {
         {
           address: mainAddress,
           amount: nanoAmount,
-          payload: payload,
+          // payload: payload,
         },
       ],
     };
