@@ -29,11 +29,9 @@ export const MyWallet = () => {
   const handleClick = () => {
     setOpen(true);
   };
-
 const handleDeposit = async () => {
   if (!ref.current) return;
 
-//   const rawInput = ref.current.value.replace(',', '.'); // заменим запятую на точку, если пользователь ввёл по-русски
   const value = Number(ref.current.value);
   if (isNaN(value) || value < 0.25) return;
 
@@ -43,15 +41,14 @@ const handleDeposit = async () => {
 
     const nanoAmount = BigInt(Math.floor(value * 1e9)).toString(); // безопасное преобразование в строку без экспоненты
 
-
     const userId = '1';
-const stateInit = beginCell()
-    .storeUint(0,32)
-    .storeStringTail(userId)
-    .endCell();
+    const stateInit = beginCell()
+      .storeUint(0, 32)
+      .storeStringTail(userId)
+      .endCell();
 
     const transaction: SendTransactionRequest = {
- validUntil: Date.now() + 5 * 60 * 1000, 
+      validUntil: Date.now() + 5 * 60 * 1000,
       messages: [
         {
           address: mainAddress,
@@ -63,16 +60,24 @@ const stateInit = beginCell()
 
     const result = await tonConnectUI.sendTransaction(transaction);
 
+    // После выполнения транзакции делаем POST запрос для верификации
     await axios.post("https://api.durowin.xyz/deposits/verify", {
       user_id: userId,
       txn_hash: result.boc,
       ton_amount: value,
       init_data: "",
     });
+
+    // После успешной верификации перенаправляем или показываем сообщение
+    setOpen(false); // Закрыть модальное окно
+    // Можешь добавить здесь другие действия, например, уведомление о успешном депозите
+    alert('Deposit successful!'); // Пример уведомления
   } catch (err) {
     console.error("Deposit error:", err);
+    alert('Deposit failed!'); // Пример уведомления об ошибке
   }
 };
+
 
 
 
