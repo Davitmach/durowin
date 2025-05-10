@@ -40,10 +40,12 @@ setSuccess(true)
 setWin(data.ton_win)
     }
     else {
+     setStart(true)
      
       if(data.ton_win && data.map) {
         play('winFlame')
         setSuccess(true)
+        setStart(false)
         
         
         setWin(data.ton_win)
@@ -53,6 +55,7 @@ setWin(data.ton_win)
         setSuccess(false)
         setStart(false)
       }
+      setStart(false)
       setMap(data.map)
       setA(false)
       
@@ -75,13 +78,14 @@ useEffect(()=> {
 
 
 if(props.active == true) {
-  console.log('qaq');
+  
   setStart(true)
   
  setActive(true)
 }
 else {
   setActive(false)
+  setStart(false)
 }
 },[props.active])
 useEffect(()=> {
