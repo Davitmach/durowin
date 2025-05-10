@@ -3,7 +3,8 @@
 import { useBalanceStore, useLanguageStore } from "@/app/store";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaXmark } from "react-icons/fa6";
 import SlotCounter from 'react-slot-counter';
 
 export const MyWallet = ()=> {
@@ -11,6 +12,8 @@ export const MyWallet = ()=> {
     const {balance} = useBalanceStore();
     const {language} = useLanguageStore();
     const userWalletAddress = useTonAddress();
+    const [open,setOpen] = useState(false);
+const ref = useRef<HTMLInputElement>(null);
 
     useEffect(()=> {
 console.log(userWalletAddress);
@@ -21,11 +24,19 @@ console.log(userWalletAddress);
             tonConnectUI.openModal()
         }
         else {
-            console.log(userWalletAddress);
+            setOpen(true)
             
         }
     }
-    return(
+    const Dep = ()=> {
+        if(ref.current) {
+            if(typeof ref.current.value !== 'number' ) return;
+            if(ref.current.value < 0.01) return 
+            console.log('qaqem vret');
+            
+        }
+    }
+    return(<>
         <div className="fadeIn bg-[#260E53] rounded-[32px] py-[16px] flex flex-col items-center gap-[20px] px-[16px] mt-[24px]">
             <div><h1 className="text-[#FFFFFF] font-[700] text-[22px]">{language=='eng'?'Your wallet':'Ваш кошелек'}</h1></div>
             <div className="flex items-center gap-[6px]">
@@ -35,6 +46,29 @@ console.log(userWalletAddress);
 <span className="text-[#FFFFFF] text-[28px]"><SlotCounter value={balance.toFixed(2)} /></span>
             </div>
             <div className="w-full flex justify-center"><button onClick={HandleClick} className="bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng'?'Top up':'Пополнить'}</button></div>
+      
         </div>
+      {open && <div className="fixed w-full px-[20px] h-[100vh] bg-black/40 left-0 top-0 z-[999999999] flex items-center justify-center">
+      <div className="max-w-[400px] deposit_box w-full p-[30px] bg-[#260e53] rounded-[16px] flex flex-col gap-[16px] relative">
+        <FaXmark onClick={()=> setOpen(false)} className="text-[20px] absolute top-[10px] right-[10px] cursor-pointer"/>
+       <div className="relative ">
+
+          <input 
+          ref={ref}
+            className="ton_input w-full !pl-[45px]"
+            type="text"
+            placeholder="0.01"
+            
+        
+           
+          />
+          <svg className="absolute top-[50%] translate-y-[-50%] left-[19px]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M17.661 4.22L9.81501 16.714C9.71904 16.8653 9.58627 16.9898 9.42911 17.0759C9.27195 17.162 9.09554 17.2068 8.91636 17.2062C8.73717 17.2056 8.56107 17.1596 8.40449 17.0725C8.24792 16.9853 8.11598 16.8599 8.02102 16.708L0.328016 4.214C0.112094 3.86425 -0.00153249 3.46102 1.56103e-05 3.05C0.00922894 2.4428 0.259239 1.86413 0.695059 1.44125C1.13088 1.01837 1.71682 0.785909 2.32402 0.794995H15.686C16.963 0.793995 18 1.8 18 3.044C18 3.457 17.884 3.865 17.661 4.22ZM2.21802 3.8L7.94102 12.626V2.912H2.81602C2.22402 2.912 1.95902 3.304 2.21802 3.802M10.058 12.628L15.783 3.8C16.048 3.303 15.777 2.91 15.184 2.91H10.06L10.058 12.628Z" fill="white" />
+          </svg>
+        </div>
+        <button className="bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng' ?'Deposit':'Пополнить'}</button>
+      </div>
+        </div>}
+        </>
     )
 }
