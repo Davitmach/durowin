@@ -30,8 +30,12 @@ console.log(userWalletAddress);
     }
     const Dep = async()=> {
         if(ref.current) {
-            if(typeof ref.current.value !== 'number' ) return;
-            if(ref.current.value < 0.01) return 
+            
+            
+            
+            
+            if(parseFloat(ref.current.value) < 0.01) return 
+            
             console.log('qaqem vret');
             const address = await axios.get<any,any>('https://api.durowin.xyz/main_ton_address');
             console.log(address);
