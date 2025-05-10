@@ -41,6 +41,7 @@ const handleDeposit = async () => {
 
     const nanoAmount = BigInt(Math.floor(value * 1e9)).toString(); // безопасное преобразование в строку без экспоненты
 
+
     const userId = 1;
     const comment = `${userId}`;
     const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
