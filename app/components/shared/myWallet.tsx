@@ -1,7 +1,7 @@
 'use client';
 
 import { useBalanceStore, useLanguageStore } from "@/app/store";
-import { useTonConnectUI } from "@tonconnect/ui-react";
+import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SlotCounter from 'react-slot-counter';
@@ -10,8 +10,12 @@ export const MyWallet = ()=> {
     const [tonConnectUI, setOptions] = useTonConnectUI();
     const {balance} = useBalanceStore();
     const {language} = useLanguageStore();
+    const userWalletAddress = useTonAddress();
 
-    
+    useEffect(()=> {
+console.log(userWalletAddress);
+
+    },[userWalletAddress])
     return(
         <div className="fadeIn bg-[#260E53] rounded-[32px] py-[16px] flex flex-col items-center gap-[20px] px-[16px] mt-[24px]">
             <div><h1 className="text-[#FFFFFF] font-[700] text-[22px]">{language=='eng'?'Your wallet':'Ваш кошелек'}</h1></div>
