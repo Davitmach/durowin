@@ -39,21 +39,23 @@ export const MyWallet = () => {
       );
       const mainAddress = addressResponse.data;
 
-      const comment = "1"; // Здесь подставь ID пользователя
-      const commentHex = Buffer.from(comment, "utf-8").toString("hex");
-      const payload = `0x${commentHex}`;
+      const tonAmount = parseFloat(ref.current.value); // сумма в TON
+const userId = 1; // вставь реального юзера
 
-      const transaction: SendTransactionRequest = {
-        validUntil: Date.now() + 5 * 60 * 1000,
-        messages: [
-          {
-            address: mainAddress,
-            amount: (value * 1e9).toFixed(0), // Переводим TON в nanotons
-            payload: payload
-          }
-        ]
-      };
+const comment = `${userId}`;
+const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
+const payload = `0x${commentHex}`;
 
+const transaction: SendTransactionRequest = {
+  validUntil: Math.floor(Date.now() / 1000) + 5 * 60, // важно: timestamp в секундах!
+  messages: [
+    {
+      address: mainAddress, // адрес с бекенда
+      amount: (tonAmount * 1e9).toFixed(0), // в нанотонах, как строка
+      payload: payload, // hex-комментарий
+    },
+  ],
+};
       const result = await tonConnectUI.sendTransaction(transaction);
 
       await axios.post("https://api.durowin.xyz/deposits/verify", {
