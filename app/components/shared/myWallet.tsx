@@ -16,6 +16,15 @@ export const MyWallet = ()=> {
 console.log(userWalletAddress);
 
     },[userWalletAddress])
+    const HandleClick = ()=> {
+        if(userWalletAddress == null) {
+            tonConnectUI.openModal()
+        }
+        else {
+            console.log(userWalletAddress);
+            
+        }
+    }
     return(
         <div className="fadeIn bg-[#260E53] rounded-[32px] py-[16px] flex flex-col items-center gap-[20px] px-[16px] mt-[24px]">
             <div><h1 className="text-[#FFFFFF] font-[700] text-[22px]">{language=='eng'?'Your wallet':'Ваш кошелек'}</h1></div>
@@ -25,9 +34,7 @@ console.log(userWalletAddress);
 </svg>
 <span className="text-[#FFFFFF] text-[28px]"><SlotCounter value={balance.toFixed(2)} /></span>
             </div>
-            <div className="w-full flex justify-center"><button onClick={()=> {
-tonConnectUI.openModal()
-            }} className="bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng'?'Top up':'Пополнить'}</button></div>
+            <div className="w-full flex justify-center"><button onClick={HandleClick} className="bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng'?'Top up':'Пополнить'}</button></div>
         </div>
     )
 }
