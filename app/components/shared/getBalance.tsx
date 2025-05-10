@@ -1,16 +1,22 @@
 "use client";
 
-import { useBalanceStore } from "@/app/store";
+import { useBalanceStore, UserData } from "@/app/store";
 import axios from "axios";
 import { useEffect } from "react";
 
 export const GetBalance = () => {
   const { setBalance,balance} = useBalanceStore();
-
+const {setId,setInitData,id,initData} = UserData()
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
+       if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            setId(window.Telegram.WebApp.initDataUnsafe?.user?.id);
+            setInitData(window.Telegram.WebApp.initData);
+        console.log('qaqs');
+        
+        const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
 
         if (response.data?.detail === "Too Many Requests") {
           const savedBalance = localStorage.getItem("ton_balance");
@@ -26,7 +32,7 @@ export const GetBalance = () => {
             localStorage.setItem("ton_balance", balance.toString());
             setBalance(balance);
           }
-        }
+        }}
 
   
       } catch (error) {

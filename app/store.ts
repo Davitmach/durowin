@@ -137,3 +137,19 @@ export const useStartGame = create<GameStart>((set) => ({
  start:false,
  setStart:(state:boolean)=> set({start:state})
 }));
+
+interface  UserData {
+  initData:string;
+  setInitData:(initdata:string)=> void
+
+  id:number;
+  setId:(id:number)=> void
+}
+
+
+export const UserData = create<UserData>((set) => ({
+ id:0,
+ setId:(id:number)=> set({id:id}),
+ initData:'',
+ setInitData:(init:string)=> set({initData:init})
+}));
