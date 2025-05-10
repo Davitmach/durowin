@@ -1,7 +1,7 @@
 'use client';
 
 import { useBalanceStore, useLanguageStore } from "@/app/store";
-import { TonConnectButton, useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
+import { SendTransactionRequest, TonConnectButton, useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
@@ -35,31 +35,34 @@ console.log(userWalletAddress);
             
             
             if(parseFloat(ref.current.value) < 0.01) return 
-            
-            console.log('qaqem vret');
+        
             const address = await axios.get<any,any>('https://api.durowin.xyz/main_ton_address');
-            console.log(address);
-             const comment = `Deposit from user ${1}`;
+            console.log(address.data);
+             const comment = `1`;
       const commentHex = Buffer.from(comment, 'utf-8').toString('hex');
       const payload = `0x${commentHex}`;
 
       // 3. Отправить транзакцию
       const amountNano = (parseFloat(ref.current.value) * 1e9).toString();
-      const tx = await tonConnectUI.sendTransaction({
-        validUntil: Math.floor(Date.now() / 1000) + 600,
+      const transaction: SendTransactionRequest = {
+        validUntil: Date.now() + 5 * 60 * 1000,
         messages: [
           {
-            address: address,
-            amount: amountNano,
-            payload,
+            address: 'UQDwAUooz2Li8vRqNO73ADEUw0ZtVnxw6YVgQhV-kRVIaMD0',
+            amount: '0.01',
+            payload: '1',
+            
           },
         ],
-      });
+      };
+
+      // 5. Отправка
+      const result = await tonConnectUI.sendTransaction(transaction);
 const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
         
       
           user_id: 1,
-          txn_hash: tx.boc, 
+          txn_hash: result.boc, 
           ton_amount: parseFloat(ref.current.value),
           init_data: '',
     
