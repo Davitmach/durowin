@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useBalanceStore, useLanguageStore, useTransactionStore } from '@/app/store';
+import { useBalanceStore, useLanguageStore, UserData, useTransactionStore } from '@/app/store';
 
 export const Withdraw = () => {
     const setWithdrawals = useTransactionStore((s) => s.setWithdrawals);
+    const {id,initData} = UserData()
  const fetchWithdrawals = async () => {
       try {
-        const res = await fetch("https://api.durowin.xyz/withdraws/get_user_list/1/1");
+        const res = await fetch(`https://api.durowin.xyz/withdraws/get_user_list/${id}/${encodeURIComponent(initData)}`);
         const data = await res.json();
 
         if (data?.detail === "Too Many Requests") {
@@ -56,15 +57,18 @@ const {language} = useLanguageStore();
 
     try {
      const data= await axios.post('https://api.durowin.xyz/withdraws/create', {
-        init_data: '1',
-        user_id: 1,
+        init_data: initData,
+        user_id: id,
         to_address: address,
         ton_amount: parseFloat(amount),
       })
      console.log(data.data);
      if(data.data.status == 'process') {
       decreaseBalance(parseFloat(amount))
-      fetchWithdrawals()
+      setTimeout(() => {
+      fetchWithdrawals()   
+      }, 1000);
+     
      }
      
       setAmount('');

@@ -14,7 +14,7 @@ const {setId,setInitData,id,initData} = UserData()
             window.Telegram.WebApp.ready();
             setId(window.Telegram.WebApp.initDataUnsafe?.user?.id);
             setInitData(window.Telegram.WebApp.initData);
-        console.log('qaqs');
+       
         
         const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
 

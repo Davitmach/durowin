@@ -1,6 +1,5 @@
 'use client';
 
-import axios from "axios";
 import { Flames } from "../UI/UX/flames";
 import { useEffect } from "react";
 import { useAviableBetBlame, useFlamesActiveGameStore } from "@/app/store";

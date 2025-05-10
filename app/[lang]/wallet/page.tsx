@@ -10,7 +10,7 @@ export default function Wallet() {
       useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
+       const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
 
         if (response.data?.detail === "Too Many Requests") {
           const savedBalance = localStorage.getItem("ton_balance");
@@ -41,8 +41,10 @@ export default function Wallet() {
         }
       }
     };
-
-    fetchBalance();
+setTimeout(() => {
+  fetchBalance();
+}, 1000);
+    
   }, [setBalance]);
     return(
         <>

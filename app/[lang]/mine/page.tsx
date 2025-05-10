@@ -4,12 +4,12 @@ import { Balance } from "@/app/components/shared/balance";
 import axios from "axios";
 import { MineBlock } from "@/app/components/UI/UX/mine";
 import { useSoundPlayer } from "@/app/sound";
-import { useBalanceStore } from "@/app/store";
+import { useBalanceStore, UserData } from "@/app/store";
 
 export default function Page() {
   const ref = useRef<HTMLInputElement>(null);
   const { play } = useSoundPlayer();
-
+const {id,initData} = UserData();
   const [inputValue, setInputValue] = useState(0.01);
   const [data, setData] = useState<any>();
   const [showWin, setShowWin] = useState(false);
@@ -41,8 +41,8 @@ const [opened,setOpen] = useState(0);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
     const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
-      user_id: 1,
-      init_data: "0",
+      user_id: id,
+      init_data:initData,
       ton_bet: inputValue
     });
 
@@ -78,7 +78,7 @@ const [opened,setOpen] = useState(0);
     const fetchBalance = async () => {
       
       try {
-        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
+        const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
 
         if (response.data?.detail === "Too Many Requests") {
           const savedBalance = localStorage.getItem("ton_balance");
@@ -112,8 +112,10 @@ const [opened,setOpen] = useState(0);
         }
       }
     };
-
-    fetchBalance();
+setTimeout(() => {
+  fetchBalance();
+}, 1000);
+    
   }, [setBalance]);
   useEffect(()=> {
 if(opened ==9 && gameStart ==true) {

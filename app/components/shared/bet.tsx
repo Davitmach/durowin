@@ -1,7 +1,7 @@
 'use client';
 
 import { useSoundPlayer } from "@/app/sound";
-import { useAviableBetBlame, useBalanceStore, useClickSuccess, useFlamesActiveGameStore, useLanguageStore, useStartGame, useWinFlame } from "@/app/store";
+import { useAviableBetBlame, useBalanceStore, useClickSuccess, useFlamesActiveGameStore, useLanguageStore, UserData, useStartGame, useWinFlame } from "@/app/store";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,7 +19,7 @@ export const Bet = ()=> {
 const {setStart} = useStartGame();
 const ref = useRef<HTMLInputElement>(null);
 const ref2 =useRef(null)
-
+const {id:userId,initData} =UserData()
 // useEffect(()=> {
 //   console.log(win);
   
@@ -34,8 +34,8 @@ const Claim = async()=> {
 if(gameTable.length==0)return
 
   axios.post('https://api.durowin.xyz/games/flames/claim',{
-    "init_data": "1",
-    "user_id": 1,
+    "init_data": initData,
+    "user_id": userId,
     "room_id": id
   }
   ).then((res)=> {
@@ -62,8 +62,8 @@ const Bet = async()=> {
   if(ref.current ) {
     if(ref.current.value < '0.01') return
   axios.post('https://api.durowin.xyz/games/flames/create',{
-    "init_data": '1',
-    "user_id": 1,
+    "init_data":initData,
+    "user_id": userId,
     "ton_bet": Number(ref.current?.value),
     "flames_count": flames
   }

@@ -2,7 +2,7 @@
 
 import { useBalanceStore, useLanguageStore, useSoundStore } from "@/app/store";
 import SlotCounter from 'react-slot-counter';
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 
 export const HeaderInfo = ()=> {

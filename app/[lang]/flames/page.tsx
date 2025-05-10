@@ -12,7 +12,8 @@ export default function Page() {
       useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
+        if (window.Telegram && window.Telegram.WebApp) {
+       const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
 
         if (response.data?.detail === "Too Many Requests") {
           const savedBalance = localStorage.getItem("ton_balance");
@@ -30,7 +31,7 @@ export default function Page() {
           }
         }
 
-  
+      }
       } catch (error) {
         console.error("Ошибка при получении баланса:", error);
         const cached = localStorage.getItem("ton_balance");
@@ -43,11 +44,13 @@ export default function Page() {
         }
       }
     };
-
-    fetchBalance();
+setTimeout(() => {
+  fetchBalance();
+}, 1000);
+    
   }, [setBalance]);
     const CheckGame = async()=> {
-        axios.get('https://api.durowin.xyz/games/flames/user_actual_room/1/1')
+        axios.get(`https://api.durowin.xyz/games/flames/user_actual_room/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`)
         .then(response => {
             const data = response.data;
           if(data == null) {
@@ -72,7 +75,10 @@ export default function Page() {
           });
         }
         useEffect(()=> {
+          setTimeout(() => {
             CheckGame()
+          }, 1000);
+            
             },[])
     return(
         <>

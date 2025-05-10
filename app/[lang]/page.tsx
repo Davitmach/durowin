@@ -3,16 +3,22 @@ import Image from "next/image";
 import { HeaderInfo } from "../components/shared/headerInfo";
 import { History } from "../components/shared/history";
 import axios from "axios";
-import { useBalanceStore } from "../store";
+import { useBalanceStore, UserData } from "../store";
 import { useEffect } from "react";
 
 export default function Home() {
       const {setBalance} = useBalanceStore()
+      const {setId,setInitData} =UserData();
       useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await axios.get("https://api.durowin.xyz/users/balance/1/1");
-
+         if (window.Telegram && window.Telegram.WebApp) {
+         window.Telegram.WebApp.ready();
+            setId(window.Telegram.WebApp.initDataUnsafe?.user?.id);
+            setInitData(window.Telegram.WebApp.initData);
+        
+        
+       const response = await axios.get(`https://api.durowin.xyz/users/balance/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
         if (response.data?.detail === "Too Many Requests") {
           const savedBalance = localStorage.getItem("ton_balance");
           if (savedBalance !== null) {
@@ -29,7 +35,7 @@ export default function Home() {
           }
         }
 
-  
+      }
       } catch (error) {
         console.error("Ошибка при получении баланса:", error);
         const cached = localStorage.getItem("ton_balance");
