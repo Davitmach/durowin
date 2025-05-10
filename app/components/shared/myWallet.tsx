@@ -96,7 +96,7 @@ const verifyRes = await axios.post('https://api.durowin.xyz/deposits/verify', {
         </div>
         <button onClick={Dep} className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer">{language=='eng' ?'Deposit':'Пополнить'}</button>
       {userWalletAddress.length>0 &&
-      <button onClick={()=> {
+      <button className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer" onClick={()=> {
         tonConnectUI.disconnect()
       }}>{language=='eng'?'Disconnect Wallet' :'Отключить кошелек'}</button>
       }
