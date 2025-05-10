@@ -2,11 +2,12 @@
 
 import { useBalanceStore, UserData } from "@/app/store";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const GetBalance = () => {
   const { setBalance,balance} = useBalanceStore();
 const {setId,setInitData,id,initData} = UserData()
+const [first,setFirst] = useState(true)
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -47,6 +48,12 @@ const {setId,setInitData,id,initData} = UserData()
         }
       }
     };
+    if(first) {
+      setTimeout(() => {
+        fetchBalance();
+        setFirst(false)
+      }, 1000);
+    }
 setInterval(() => {
    fetchBalance();
 }, 15000);
