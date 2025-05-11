@@ -10,7 +10,7 @@ export const TransactionLoader = () => {
   useEffect(() => {
     const fetchDeposits = async () => {
       try {
-        const res = await fetch(`https://api.durowin.xyz/deposits/get_users_deposits/${window.Telegram.WebApp.initDataUnsafe.user.id}/${window.Telegram.WebApp.initData}`);
+        const res = await fetch(`https://api.durowin.xyz/deposits/get_users_deposits/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
         const data = await res.json();
 
         if (data?.detail === "Too Many Requests") {
@@ -45,7 +45,7 @@ export const TransactionLoader = () => {
 
     const fetchWithdrawals = async () => {
       try {
-        const res = await fetch(`https://api.durowin.xyz/withdraws/get_user_list/${window.Telegram.WebApp.initDataUnsafe.user.id}/${window.Telegram.WebApp.initData}`);
+        const res = await fetch(`https://api.durowin.xyz/withdraws/get_user_list/${window.Telegram.WebApp.initDataUnsafe.user.id}/${encodeURIComponent(window.Telegram.WebApp.initData)}`);
         const data = await res.json();
 
         if (data?.detail === "Too Many Requests") {
