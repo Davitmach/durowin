@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
-import { Balance } from "@/app/components/shared/balance";
+import { Balance, Balance2 } from "@/app/components/shared/balance";
 import axios from "axios";
 import { MineBlock } from "@/app/components/UI/UX/mine";
 import { useSoundPlayer } from "@/app/sound";
@@ -131,7 +131,7 @@ if(opened ==9 && gameStart ==true) {
     <>
       <div className=" max-w-[400px]   mine_container w-full h-[100vh] mb-[20px]">
         <div className="w-full flex justify-center">
-          <Balance />
+          <Balance2 />
         </div>
 
         <div style={{justifyItems:'center'}} className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
