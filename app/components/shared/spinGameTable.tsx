@@ -171,8 +171,8 @@ setColumns(trimmedColumns);
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            user_id: 1,
-            init_data: '1',
+            user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+            init_data: window.Telegram.WebApp.initData,
             ton_bet: inputValue,
           }),
         });
