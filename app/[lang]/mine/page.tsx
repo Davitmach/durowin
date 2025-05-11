@@ -42,7 +42,7 @@ const [opened,setOpen] = useState(0);
     setBlockTypes(Array(9).fill('ton'));
     const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
       user_id:window.Telegram.WebApp.initDataUnsafe.user.id,
-      init_data:window.Telegram.WepApp.initData,
+      init_data:window.Telegram.WebApp.initData,
       ton_bet: inputValue
     });
 
