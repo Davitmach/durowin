@@ -161,7 +161,7 @@ if(show ==true) {
                <h1 className='absolute right-0 text-[13px] text-[#999999]'>{language=='eng'? 'min 0.25':'минимум 0.25'}</h1>
             </div>
 
-            <button
+           {userWalletAddress.length>0 && <button
               onClick={()=>{
 setInterval(() => {
   handleDeposit()
@@ -173,7 +173,7 @@ setInterval(() => {
             >
               {language === "eng" ? "Deposit" : "Пополнить"}
             </button>
-
+}
             {userWalletAddress.length > 0 && (
               <button
                 className="outline-none bg-[#742CF1] rounded-[100px] w-full py-[13px] font-[600] text-[16px] cursor-pointer"
