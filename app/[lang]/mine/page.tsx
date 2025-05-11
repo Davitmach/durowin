@@ -176,7 +176,9 @@ if(opened ==9 && gameStart ==true) {
             </div>
           </div>
           <div className="fadeIn">
-            <button onClick={Mine} className="active:scale-[1.2] duration-[300ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
+            <button onClick={()=> {setTimeout(() => {
+              Mine()
+            }, 1000); }} className="active:scale-[1.2] duration-[300ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
           </div>
         </div>
       </div>
