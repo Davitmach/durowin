@@ -114,118 +114,118 @@ const {push} = useRouter();
     }, []);
 
 
-//     const handleSpin = async () => {
-//       if(inputValue < balance) {
-//    decreaseBalance(inputValue)
+    const handleSpin = async () => {
+      if(inputValue < balance) {
+   decreaseBalance(inputValue)
         
       
        
-//         play('start')
-//       setSpin(false);
-//       setShowResult(false);
-//       setResult(null);
-//       setActive(true);
-//       setTimeout(() => {
-//         setActive(false);
-//       }, 3000);
-// setTimeout(() => {
-//   play('game')     
-// }, 300);
+        play('start')
+      setSpin(false);
+      setShowResult(false);
+      setResult(null);
+      setActive(true);
+      setTimeout(() => {
+        setActive(false);
+      }, 3000);
+setTimeout(() => {
+  play('game')     
+}, 300);
  
   
 
-// const trimmedColumns = columns.map((col) => col.slice(-3));
-// setColumns(trimmedColumns); 
-//       const tempColumns: string[][] = [[], [], []];
-//       for (let i = 0; i < 27; i++) {
-//         const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
-//         row.forEach((val, idx) => {
-//           tempColumns[idx].push(val);
-//         });
-//       }
-//       const newColumns = isFirstSpin
-//       ? columns
-//       : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
+const trimmedColumns = columns.map((col) => col.slice(-3));
+setColumns(trimmedColumns); 
+      const tempColumns: string[][] = [[], [], []];
+      for (let i = 0; i < 27; i++) {
+        const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
+        row.forEach((val, idx) => {
+          tempColumns[idx].push(val);
+        });
+      }
+      const newColumns = isFirstSpin
+      ? columns
+      : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
 
-//       setColumns(newColumns);
+      setColumns(newColumns);
     
 
-//       if (isFirstSpin) {
-//         setIsFirstSpin(false);
-//       }
+      if (isFirstSpin) {
+        setIsFirstSpin(false);
+      }
     
-//       setTimeout(() => setSpin(true), 10);
+      setTimeout(() => setSpin(true), 10);
     
-//       try {
-//         const res = await fetch('https://api.durowin.xyz/games/spin/play', {
-//           method: 'POST',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({
-//             user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-//             init_data: window.Telegram.WebApp.initData,
-//             ton_bet: inputValue,
-//           }),
-//         });
+      try {
+        const res = await fetch('https://api.durowin.xyz/games/spin/play', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+            init_data: window.Telegram.WebApp.initData,
+            ton_bet: inputValue,
+          }),
+        });
 
-//         const data: SpinResult = await res.json();
-//       if(!data.result) {
+        const data: SpinResult = await res.json();
+      if(!data.result) {
 
-//         push(`/${language}`)
-//       }
+        push(`/${language}`)
+      }
     
-//         setResult(data);
-//       setTimeout(() => {
+        setResult(data);
+      setTimeout(() => {
         
        
-//         setBalance(data.balance);
+        setBalance(data.balance);
 
       
-//         if(Number(data.result.ton_win)>0) {
-//           if (
-//             Array.isArray(data.result.row_2) &&
-//             data.result.row_2.some((item) => item?.includes?.('ton'))
-//           ) {
-//             play('winTon');
-//             triggerAnimation()
-//           }
-//           else {
-//             play('win')
+        if(Number(data.result.ton_win)>0) {
+          if (
+            Array.isArray(data.result.row_2) &&
+            data.result.row_2.some((item) => item?.includes?.('ton'))
+          ) {
+            play('winTon');
+            triggerAnimation()
+          }
+          else {
+            play('win')
      
-//           }
-//         }
-//         else {
-//           play('noTon')
+          }
+        }
+        else {
+          play('noTon')
         
-//         }
-//       }, 2000);
-//         setTimeout(() => {
-//           const withResult: string[][] = [...newColumns];
+        }
+      }, 2000);
+        setTimeout(() => {
+          const withResult: string[][] = [...newColumns];
     
-//           // Добавляем 3 строки результата
-//           withResult[0].push(data.result.row_1[0]);
-//           withResult[1].push(data.result.row_1[1]);
-//           withResult[2].push(data.result.row_1[2]);
-//           withResult[0].push(data.result.row_2[0]);
-//           withResult[1].push(data.result.row_2[1]);
-//           withResult[2].push(data.result.row_2[2]);
-//           withResult[0].push(data.result.row_3[0]);
-//           withResult[1].push(data.result.row_3[1]);
-//           withResult[2].push(data.result.row_3[2]);
+          // Добавляем 3 строки результата
+          withResult[0].push(data.result.row_1[0]);
+          withResult[1].push(data.result.row_1[1]);
+          withResult[2].push(data.result.row_1[2]);
+          withResult[0].push(data.result.row_2[0]);
+          withResult[1].push(data.result.row_2[1]);
+          withResult[2].push(data.result.row_2[2]);
+          withResult[0].push(data.result.row_3[0]);
+          withResult[1].push(data.result.row_3[1]);
+          withResult[2].push(data.result.row_3[2]);
     
-//           setColumns(withResult);
+          setColumns(withResult);
     
-//           setTimeout(() => {
-//             setShowResult(true);
-//           }, 2000);
-//         }, 100);
-//       } catch (err) {
-//         console.error('Ошибка:', err);
-//       }
-//     }
-//     else {
-//       play('noTon')
-//     }
-//     ;}
+          setTimeout(() => {
+            setShowResult(true);
+          }, 2000);
+        }, 100);
+      } catch (err) {
+        console.error('Ошибка:', err);
+      }
+    }
+    else {
+      play('noTon')
+    }
+    ;}
 
 // const handleSpin = async () => {
 //   if (inputValue < balance) {
@@ -324,111 +324,110 @@ const {push} = useRouter();
 //     play('noTon');
 //   }
 // };
-const handleSpin = async () => {
-  if (inputValue < balance) {
-    decreaseBalance(inputValue);
+// const handleSpin = async () => {
+//   if (inputValue < balance) {
+//     decreaseBalance(inputValue);
 
-    setSpin(false);
-    setShowResult(false);
-    setResult(null);
-    setActive(true);
-    setTimeout(() => {
-      setActive(false);
-    }, 3000);
+//     setSpin(false);
+//     setShowResult(false);
+//     setResult(null);
+//     setActive(true);
+//     setTimeout(() => {
+//       setActive(false);
+//     }, 3000);
 
-    const trimmedColumns = columns.map((col) => col.slice(-3));
-    setColumns(trimmedColumns);
+//     const trimmedColumns = columns.map((col) => col.slice(-3));
+//     setColumns(trimmedColumns);
 
-    const tempColumns: string[][] = [[], [], []];
-    for (let i = 0; i < 27; i++) {
-      const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
-      row.forEach((val, idx) => {
-        tempColumns[idx].push(val);
-      });
-    }
+//     const tempColumns: string[][] = [[], [], []];
+//     for (let i = 0; i < 27; i++) {
+//       const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
+//       row.forEach((val, idx) => {
+//         tempColumns[idx].push(val);
+//       });
+//     }
 
-    const newColumns = isFirstSpin
-      ? columns
-      : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
+//     const newColumns = isFirstSpin
+//       ? columns
+//       : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
 
-    setColumns(newColumns);
+//     setColumns(newColumns);
 
-    if (isFirstSpin) {
-      setIsFirstSpin(false);
-    }
+//     if (isFirstSpin) {
+//       setIsFirstSpin(false);
+//     }
 
-    try {
-      // 🎯 Отправка на сервер
-      const res = await fetch('https://api.durowin.xyz/games/spin/play', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-          init_data: window.Telegram.WebApp.initData,
-          ton_bet: inputValue,
-        }),
-      });
+//     try {
 
-      const data: SpinResult = await res.json();
+//       const res = await fetch('https://api.durowin.xyz/games/spin/play', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+//           init_data: window.Telegram.WebApp.initData,
+//           ton_bet: inputValue,
+//         }),
+//       });
 
-      if (!data.result) {
-        push(`/${language}`);
-        return;
-      }
+//       const data: SpinResult = await res.json();
 
-      setResult(data);
+//       if (!data.result) {
+//         push(`/${language}`);
+//         return;
+//       }
 
-      // 🟢 Только сейчас запускаем спин и звуки
-      play('start');          // звук запуска
-      setSpin(true);          // спин начинается
-      setTimeout(() => {
-        play('game');         // основной звук вращения
-      }, 300);
+//       setResult(data);
 
-      setTimeout(() => {
-        setBalance(data.balance);
+//       play('start');     
+//       setSpin(true);  
+//       setTimeout(() => {
+//         play('game');        
+//       }, 300);
 
-        if (Number(data.result.ton_win) > 0) {
-          if (
-            Array.isArray(data.result.row_2) &&
-            data.result.row_2.some((item) => item?.includes?.('ton'))
-          ) {
-            play('winTon');
-            triggerAnimation();
-          } else {
-            play('win');
-          }
-        } else {
-          play('noTon');
-        }
-      }, 2000);
+//       setTimeout(() => {
+//         setBalance(data.balance);
 
-      setTimeout(() => {
-        const withResult: string[][] = [...newColumns];
+//         if (Number(data.result.ton_win) > 0) {
+//           if (
+//             Array.isArray(data.result.row_2) &&
+//             data.result.row_2.some((item) => item?.includes?.('ton'))
+//           ) {
+//             play('winTon');
+//             triggerAnimation();
+//           } else {
+//             play('win');
+//           }
+//         } else {
+//           play('noTon');
+//         }
+//       }, 2000);
 
-        withResult[0].push(data.result.row_1[0]);
-        withResult[1].push(data.result.row_1[1]);
-        withResult[2].push(data.result.row_1[2]);
-        withResult[0].push(data.result.row_2[0]);
-        withResult[1].push(data.result.row_2[1]);
-        withResult[2].push(data.result.row_2[2]);
-        withResult[0].push(data.result.row_3[0]);
-        withResult[1].push(data.result.row_3[1]);
-        withResult[2].push(data.result.row_3[2]);
+//       setTimeout(() => {
+//         const withResult: string[][] = [...newColumns];
 
-        setColumns(withResult);
+//         withResult[0].push(data.result.row_1[0]);
+//         withResult[1].push(data.result.row_1[1]);
+//         withResult[2].push(data.result.row_1[2]);
+//         withResult[0].push(data.result.row_2[0]);
+//         withResult[1].push(data.result.row_2[1]);
+//         withResult[2].push(data.result.row_2[2]);
+//         withResult[0].push(data.result.row_3[0]);
+//         withResult[1].push(data.result.row_3[1]);
+//         withResult[2].push(data.result.row_3[2]);
 
-        setTimeout(() => {
-          setShowResult(true);
-        }, 2000);
-      }, 100);
-    } catch (err) {
-      console.error('Ошибка:', err);
-    }
-  } else {
-    play('noTon');
-  }
-};
+//         setColumns(withResult);
+
+//         setTimeout(() => {
+//           setShowResult(true);
+//         }, 2000);
+//       }, 100);
+//     } catch (err) {
+//       console.error('Ошибка:', err);
+//     }
+//   } else {
+//     play('noTon');
+//   }
+// };
 
     
     
