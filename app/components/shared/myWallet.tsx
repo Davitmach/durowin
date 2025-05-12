@@ -144,7 +144,7 @@ if(show ==true) {
                 ref={ref}
                 className="ton_input w-full !pl-[45px]"
                 type="text"
-                placeholder="0.01"
+                placeholder="0.25"
               />
               <svg
                 className="absolute top-[50%] translate-y-[-50%] left-[19px]"
