@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react"
 import { FaQuestion } from "react-icons/fa6";
 import Image from 'next/image';
-import { useBalanceStore, useClickSuccess, useFlamesActiveGameStore, UserData, useStartGame, useWinFlame } from "@/app/store";
+import { useAviableBetBlame, useBalanceStore, useClickSuccess, useFlamesActiveGameStore, UserData, useStartGame, useWinFlame } from "@/app/store";
 import axios from "axios";
 import { useSoundPlayer } from "@/app/sound";
 
@@ -22,6 +22,7 @@ const {setSuccess,success} = useClickSuccess();
 const {setWin,setLose} = useWinFlame()
 const {start,setStart} = useStartGame()
 const {initData,id:userId} = UserData();
+const {setActive:setBetFlameAviable} = useAviableBetBlame();
 const Click = async()=> {
   if(active == false) return 
   axios.post('https://api.durowin.xyz/games/flames/click',{
@@ -42,7 +43,7 @@ setWin(data.ton_win)
     }
     else {
      setStart(true)
-     
+     setBetFlameAviable(true)
       if(data.ton_win && data.map) {
         play('winFlame')
         setSuccess(true)
