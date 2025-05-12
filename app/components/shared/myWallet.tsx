@@ -163,7 +163,7 @@ if(show ==true) {
 
            {userWalletAddress.length>0 && <button
               onClick={()=>{
-setInterval(() => {
+setTimeout(() => {
   handleDeposit()
 }, 1000);
 
