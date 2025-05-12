@@ -69,8 +69,9 @@ const [opened,setOpen] = useState(0);
 
   const Mine = async () => {
   if (gameStart) return;
+console.log(gameStart,'gamestart');
 
-  setGameStart(true); // моментальная блокировка
+  setGameStart(true); 
 
   setShowWin(false);
   setData(null);
@@ -96,11 +97,11 @@ const [opened,setOpen] = useState(0);
       const shuffled = [...values].sort(() => Math.random() - 0.5);
       setBlockTypes(shuffled);
     } else {
-      setGameStart(false); // если нет результата
+      setGameStart(false); 
     }
   } catch (error) {
     console.error("Ошибка при старте игры:", error);
-    setGameStart(false); // разблокировать на ошибке
+    setGameStart(false); 
   }
 };
 
