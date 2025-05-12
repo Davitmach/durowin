@@ -69,7 +69,9 @@ const [opened,setOpen] = useState(0);
 
   const Mine = async () => {
   if (gameStart) return;
+if(balance < inputValue) {
 
+}else {
 
   setGameStart(true); 
 console.log(gameStart,'gamestart');
@@ -103,7 +105,7 @@ console.log(gameStart,'gamestart');
     console.error("Ошибка при старте игры:", error);
     setGameStart(false); 
   }
-};
+};}
 
   useEffect(() => {
     if (!gameStart) {
