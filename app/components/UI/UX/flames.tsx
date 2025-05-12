@@ -72,13 +72,7 @@ setWin(data.ton_win)
     }
   })
 }
-// useEffect(()=> {
-// if(success == true) {
-//   setTimeout(() => {
-//     setSuccess(false)
-//   }, 1000);
-// }
-// },[success])
+
 
 useEffect(()=> {
 
@@ -91,8 +85,8 @@ if(props.active == true) {
 }
 else {
   setActive(false)
-  setStart(false)
-   console.log('start -');
+  // setStart(false)
+  //  console.log('start -');
 }
 },[props.active])
 useEffect(()=> {
