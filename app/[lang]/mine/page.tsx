@@ -16,6 +16,7 @@ const {id,initData} = UserData();
   const [gameStart, setGameStart] = useState(false);
   const [blockTypes, setBlockTypes] = useState<('ton' | 'dirt')[]>([]);
 const [opened,setOpen] = useState(0);
+const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
 
   const handleIncrease = () => {
@@ -172,7 +173,8 @@ setTimeout(() => {
 if(opened ==9 && gameStart ==true) {
   setTimeout(() => {
   setOpen(0);
-  setGameStart(false)    
+  setGameStart(false)   
+  setClick(false) 
   }, 2000);
 
 }
@@ -228,7 +230,8 @@ if(opened ==9 && gameStart ==true) {
           </div>
           <div className="fadeIn">
             <button onClick={()=> {
-              if(gameStart==true) return
+              setClick(true)
+              if(gameStart==true && clicked == true) return
               Mine()}} className=" active:scale-[1.2] duration-[300ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
           </div>
         </div>
