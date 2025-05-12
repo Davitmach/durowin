@@ -50,6 +50,7 @@ export const Withdraw = () => {
   const [address, setAddress] = useState('');
 const {language} = useLanguageStore();
   const handleWithdraw = async () => {
+    if(Number(amount) < 0.25) return
     if (!amount || !address) {
 
       return;
@@ -90,7 +91,7 @@ const {language} = useLanguageStore();
           <input
             className="ton_input w-full"
             type="text"
-            placeholder="0.01"
+            placeholder="0.25"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
