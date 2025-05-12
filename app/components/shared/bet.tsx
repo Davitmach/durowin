@@ -178,7 +178,7 @@ if(success == true && win ==0) {
  className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">1/2</div>
                     <div  onClick={()=> {
                       if(ref.current) {
-                        ref.current.value = balance.toString()
+                        ref.current.value = balance.toFixed(2).toString()
                       }
                     }} className=" h-[31px] bg-[#482BAB] border border-[#381CB280] rounded-[100px] flex-1 flex items-center justify-center text-[#FFFFFF] font-[400] text-[16px] cursor-pointer">MAX</div>
                 </div>
