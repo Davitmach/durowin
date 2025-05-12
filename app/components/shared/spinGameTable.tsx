@@ -227,10 +227,107 @@ const {push} = useRouter();
 //     }
 //     ;}
 
+// const handleSpin = async () => {
+//   if (inputValue < balance) {
+//     decreaseBalance(inputValue);
+//     play('start');
+//     setSpin(false);
+//     setShowResult(false);
+//     setResult(null);
+//     setActive(true);
+//     setTimeout(() => {
+//       setActive(false);
+//     }, 3000);
+
+//     const trimmedColumns = columns.map((col) => col.slice(-3));
+//     setColumns(trimmedColumns);
+
+//     const tempColumns: string[][] = [[], [], []];
+//     for (let i = 0; i < 27; i++) {
+//       const row = [getRandomIcon(), getRandomIcon(), getRandomIcon()];
+//       row.forEach((val, idx) => {
+//         tempColumns[idx].push(val);
+//       });
+//     }
+
+//     const newColumns = isFirstSpin
+//       ? columns
+//       : tempColumns.map((col, idx) => [...trimmedColumns[idx], ...col]);
+
+//     setColumns(newColumns);
+
+//     if (isFirstSpin) {
+//       setIsFirstSpin(false);
+//     }
+
+//     try {
+//       const res = await fetch('https://api.durowin.xyz/games/spin/play', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+//           init_data: window.Telegram.WebApp.initData,
+//           ton_bet: inputValue,
+//         }),
+//       });
+
+//       const data: SpinResult = await res.json();
+
+//       if (!data.result) {
+//         push(`/${language}`);
+//         return;
+//       }
+
+//       setResult(data);
+//       setSpin(true); // ✅ КРУТИМ только после получения данных
+
+//       setTimeout(() => {
+//         setBalance(data.balance);
+
+//         if (Number(data.result.ton_win) > 0) {
+//           if (
+//             Array.isArray(data.result.row_2) &&
+//             data.result.row_2.some((item) => item?.includes?.('ton'))
+//           ) {
+//             play('winTon');
+//             triggerAnimation();
+//           } else {
+//             play('win');
+//           }
+//         } else {
+//           play('noTon');
+//         }
+//       }, 2000);
+
+//       setTimeout(() => {
+//         const withResult: string[][] = [...newColumns];
+//         withResult[0].push(data.result.row_1[0]);
+//         withResult[1].push(data.result.row_1[1]);
+//         withResult[2].push(data.result.row_1[2]);
+//         withResult[0].push(data.result.row_2[0]);
+//         withResult[1].push(data.result.row_2[1]);
+//         withResult[2].push(data.result.row_2[2]);
+//         withResult[0].push(data.result.row_3[0]);
+//         withResult[1].push(data.result.row_3[1]);
+//         withResult[2].push(data.result.row_3[2]);
+
+//         setColumns(withResult);
+
+//         setTimeout(() => {
+//           setShowResult(true);
+//         }, 2000);
+//       }, 100);
+//     } catch (err) {
+//       console.error('Ошибка:', err);
+//     }
+//   } else {
+//     play('noTon');
+//   }
+// };
 const handleSpin = async () => {
   if (inputValue < balance) {
     decreaseBalance(inputValue);
-    play('start');
+
     setSpin(false);
     setShowResult(false);
     setResult(null);
@@ -261,6 +358,7 @@ const handleSpin = async () => {
     }
 
     try {
+      // 🎯 Отправка на сервер
       const res = await fetch('https://api.durowin.xyz/games/spin/play', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -279,7 +377,13 @@ const handleSpin = async () => {
       }
 
       setResult(data);
-      setSpin(true); // ✅ КРУТИМ только после получения данных
+
+      // 🟢 Только сейчас запускаем спин и звуки
+      play('start');          // звук запуска
+      setSpin(true);          // спин начинается
+      setTimeout(() => {
+        play('game');         // основной звук вращения
+      }, 300);
 
       setTimeout(() => {
         setBalance(data.balance);
@@ -301,6 +405,7 @@ const handleSpin = async () => {
 
       setTimeout(() => {
         const withResult: string[][] = [...newColumns];
+
         withResult[0].push(data.result.row_1[0]);
         withResult[1].push(data.result.row_1[1]);
         withResult[2].push(data.result.row_1[2]);
