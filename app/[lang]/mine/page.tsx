@@ -70,7 +70,7 @@ const [opened,setOpen] = useState(0);
   const Mine = async () => {
   if (gameStart) return;
 if(balance < inputValue) {
-
+play('noTon')
 }else {
 
   setGameStart(true); 
