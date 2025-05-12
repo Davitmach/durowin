@@ -20,16 +20,7 @@ const {setStart} = useStartGame();
 const ref = useRef<HTMLInputElement>(null);
 const ref2 =useRef(null)
 const {id:userId,initData} =UserData()
-// useEffect(()=> {
-//   console.log(win);
-  
-// if(win !==0) {
-//   setTimeout(() => {
-//     setWin(0)
-//   }, 1000);
-// }
 
-// },[win])
 const Claim = async()=> {
 if(gameTable.length==0)return
 
@@ -52,7 +43,7 @@ if(gameTable.length==0)return
       setTimeout(() => {
         setWin(0)
         setSuccess(false)
-        setStart(false)
+        // setStart(false)
       }, 3000);
   
     }
