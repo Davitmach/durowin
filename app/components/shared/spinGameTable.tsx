@@ -419,8 +419,8 @@ const handleSpin = async () => {
 
         setTimeout(() => {
           setShowResult(true);
-        }, 2000);
-      }, 100);
+        }, 1000);
+      }, 2000);
     } catch (err) {
       console.error('Ошибка:', err);
     }
