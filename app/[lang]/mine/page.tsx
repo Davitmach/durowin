@@ -34,37 +34,75 @@ const [opened,setOpen] = useState(0);
     }
   };
 
-  const Mine = async () => {
+  // const Mine = async () => {
     
-    if(gameStart ==true) return
-    setShowWin(false);
-    setGameStart(true);
-    setData(null);
-    setBlockTypes(Array(9).fill('ton'));
+  //   if(gameStart ==true) return
+  //   setShowWin(false);
+  //   setGameStart(true);
+  //   setData(null);
+  //   setBlockTypes(Array(9).fill('ton'));
+  //   const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
+  //     user_id:window.Telegram.WebApp.initDataUnsafe.user.id,
+  //     init_data:window.Telegram.WebApp.initData,
+  //     ton_bet: inputValue
+  //   });
+
+  //   if (response.data.result) {
+  //     play('mineStart');
+  //     setData(response.data);
+  //     decreaseBalance(inputValue);
+      
+  //     setGameStart(true);  
+  
+      
+
+  //     const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
+  //     const values: ('ton' | 'dirt')[] = [
+  //       ...Array(tonCount).fill('ton'),
+  //       ...Array(9 - tonCount).fill('dirt')
+  //     ];
+  //     const shuffled = [...values].sort(() => Math.random() - 0.5);
+  //     setBlockTypes(shuffled);
+  //   }
+  // };
+
+
+  const Mine = async () => {
+  if (gameStart) return;
+
+  setGameStart(true); // моментальная блокировка
+
+  setShowWin(false);
+  setData(null);
+  setBlockTypes(Array(9).fill('ton'));
+
+  try {
     const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
-      user_id:window.Telegram.WebApp.initDataUnsafe.user.id,
-      init_data:window.Telegram.WebApp.initData,
-      ton_bet: inputValue
+      user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+      init_data: window.Telegram.WebApp.initData,
+      ton_bet: inputValue,
     });
 
     if (response.data.result) {
       play('mineStart');
       setData(response.data);
       decreaseBalance(inputValue);
-      
-      setGameStart(true);  
-  
-      
 
       const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
       const values: ('ton' | 'dirt')[] = [
         ...Array(tonCount).fill('ton'),
-        ...Array(9 - tonCount).fill('dirt')
+        ...Array(9 - tonCount).fill('dirt'),
       ];
       const shuffled = [...values].sort(() => Math.random() - 0.5);
       setBlockTypes(shuffled);
+    } else {
+      setGameStart(false); // если нет результата
     }
-  };
+  } catch (error) {
+    console.error("Ошибка при старте игры:", error);
+    setGameStart(false); // разблокировать на ошибке
+  }
+};
 
   useEffect(() => {
     if (!gameStart) {
