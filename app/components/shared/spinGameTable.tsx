@@ -530,10 +530,13 @@ const handleSpin = async () => {
 
 <div className="h-[170px] flex overflow-hidden gap-[3px] ">
         {columns.map((col, colIndex) => (
-          <div
+          <div style={{
+            backgroundRepeat:'repeat-y',
+            backgroundSize:'10000px 10000px'
+          }}
             key={colIndex}
             className={
-              'flex bg-[#8643FA] bg-fixed   flex-1 flex-col  ' +
+              'flex bg-[#8643FA] bg-fixed    flex-1 flex-col  ' +
               (spin ? `spin-col  spin-delay-${colIndex}` : '')
             }
           >
