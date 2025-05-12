@@ -38,7 +38,7 @@ const [opened,setOpen] = useState(0);
     
     if(gameStart ==true) return
     setShowWin(false);
-    setGameStart(false);
+    setGameStart(true);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
     const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
@@ -51,9 +51,9 @@ const [opened,setOpen] = useState(0);
       play('mineStart');
       setData(response.data);
       decreaseBalance(inputValue);
-      setTimeout(() => {
+      
       setGameStart(true);  
-      }, 1000);
+  
       
 
       const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
