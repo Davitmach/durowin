@@ -51,7 +51,10 @@ const [opened,setOpen] = useState(0);
       play('mineStart');
       setData(response.data);
       decreaseBalance(inputValue);
-      setGameStart(true);
+      setTimeout(() => {
+      setGameStart(true);  
+      }, 1000);
+      
 
       const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
       const values: ('ton' | 'dirt')[] = [
