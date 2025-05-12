@@ -43,6 +43,7 @@ if(gameTable.length==0)return
     if(data.ok == true) {
       setActive(false)
       setId(null)
+      SetA(true)
       setBalance(data.balance)
       setMap(data.map)
       play('winFlame')
