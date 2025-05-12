@@ -85,8 +85,7 @@ if(props.active == true) {
 }
 else {
   setActive(false)
-  // setStart(false)
-  //  console.log('start -');
+
 }
 },[props.active])
 useEffect(()=> {
