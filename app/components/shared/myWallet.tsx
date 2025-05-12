@@ -89,7 +89,7 @@ if(show ==true) {
   return (
     <>
     {show&&
-    <div className='fadeIn bg-[#742cf1] rounded-[12px] p-[10px]  flex items-center justify-center left-[50%] translate-x-[-50%] text-[19px] fixed max-w-[400px] top-[20px] w-[89%] z-[99999999] shadow-xl '>Ваши средства поступят через минуту</div>
+    <div className='fadeIn bg-[#742cf1] rounded-[12px] p-[10px]  flex items-center justify-center left-[50%] translate-x-[-50%] text-[19px] fixed max-w-[400px] top-[20px] w-[89%] z-[99999999] shadow-xl '>{language=='ru'?'Ваши средства поступят через минуту' :'Your funds will arrive in a minute'}</div>
     }
       <div className="fadeIn bg-[#260E53] rounded-[32px] py-[16px] flex flex-col items-center gap-[20px] px-[16px] mt-[24px]">
         <div>

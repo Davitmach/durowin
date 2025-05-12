@@ -194,7 +194,7 @@ if(opened ==9 && gameStart ==true) {
           </h1>
         </div>
 
-        <div className="flex flex-col items-center gap-[23px] mt-[60px] pb-[103px]">
+        <div className="flex flex-col items-center gap-[23px] mt-[45px] pb-[103px]">
           <div className="mt-[2px] flex items-center gap-[16px] cursor-pointer fadeIn">
             <div onClick={handleDicrement} style={{ opacity: inputValue > 0.01 ? '1' : '0.5' }} className="w-[32px] h-[32px] flex items-center justify-center rounded-[8px] bg-[#FFFFFF]">
               <svg width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
