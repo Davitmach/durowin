@@ -35,12 +35,10 @@ const [opened,setOpen] = useState(0);
   };
 
   const Mine = async () => {
-     if (gameStart) return;
-
-  setGameStart(true); 
-    // if(gameStart ==true) return
+    
+    if(gameStart ==true) return
     setShowWin(false);
-    // setGameStart(false);
+    setGameStart(false);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
     const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
