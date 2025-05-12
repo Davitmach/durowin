@@ -7,17 +7,17 @@ import { useAviableBetBlame, useFlamesActiveGameStore } from "@/app/store";
 export const FlamesGameTable = ()=> {
 const {gameTable,map,setMap,setGameTable} = useFlamesActiveGameStore();
 const {setActive} = useAviableBetBlame()
-useEffect(()=> {
+// useEffect(()=> {
  
   
-if(map!=='') {
-  setTimeout(() => {
-    setMap('')
-    setGameTable([])
-    setActive(true)
-  }, 3000);
-}
-},[map,gameTable])
+// if(map!=='') {
+//   setTimeout(() => {
+//     setMap('')
+//     setGameTable([])
+//     setActive(true)
+//   }, 3000);
+// }
+// },[map,gameTable])
     return(
         <div className="grid grid-cols-4 gap-[16px] mt-[20px] ">
            {map=='' ?  Array.from({ length: 12 }, (_, index) => {
