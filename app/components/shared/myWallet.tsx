@@ -111,7 +111,7 @@ if(show ==true) {
             />
           </svg>
           <span className="text-[#FFFFFF] text-[28px]">
-            <SlotCounter value={balance.toFixed(2)} />
+            <SlotCounter value={(Math.floor(balance * 100) / 100).toFixed(2)} />
           </span>
         </div>
         <div className="w-full flex justify-center">
