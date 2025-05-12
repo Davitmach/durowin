@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useBalanceStore, useLanguageStore, UserData, useTransactionStore } from '@/app/store';
 
@@ -8,6 +8,10 @@ export const Withdraw = () => {
     const setWithdrawals = useTransactionStore((s) => s.setWithdrawals);
     const {id,initData} = UserData()
     const {balance} = useBalanceStore();
+    useEffect(()=> {
+console.log(balance);
+
+    },[balance])
  const fetchWithdrawals = async () => {
       try {
         const res = await fetch(`https://api.durowin.xyz/withdraws/get_user_list/${id}/${encodeURIComponent(initData)}`);
