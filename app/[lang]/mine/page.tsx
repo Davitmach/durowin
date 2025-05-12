@@ -182,7 +182,7 @@ if(opened ==9 && gameStart ==true) {
   },[opened])
   return (
     <>
-      <div className=" max-w-[400px]   mine_container w-full h-[100vh] mb-[20px]">
+      <div className=" max-w-[400px] relative  mine_container w-full h-[100vh] mb-[20px]">
         <div className="w-full flex justify-center">
           <Balance2 />
         </div>
