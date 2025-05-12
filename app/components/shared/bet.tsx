@@ -62,7 +62,7 @@ const Bet = async()=> {
   
   ).then((res)=> {
     setStart(true)
-    console.log('qaqem vret');
+   
     
     setWin(0);
     setSuccess(false)

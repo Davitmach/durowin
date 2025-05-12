@@ -48,6 +48,8 @@ setWin(data.ton_win)
         play('winFlame')
         setSuccess(true)
         setStart(false)
+        console.log('start -');
+        
         
         
         setWin(data.ton_win)
@@ -56,8 +58,10 @@ setWin(data.ton_win)
         play('clickFail')
         setSuccess(false)
         setStart(false)
+         console.log('start -');
       }
       setStart(false)
+       console.log('start -');
       setMap(data.map)
       setA(false)
       
@@ -88,6 +92,7 @@ if(props.active == true) {
 else {
   setActive(false)
   setStart(false)
+   console.log('start -');
 }
 },[props.active])
 useEffect(()=> {
