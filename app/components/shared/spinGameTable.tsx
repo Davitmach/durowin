@@ -420,8 +420,8 @@ const handleSpin = async () => {
 
         setTimeout(() => {
           setShowResult(true);
-        }, 1000);
-      }, 900);
+        }, 2000);
+      }, 100);
     } catch (err) {
       console.error('Ошибка:', err);
     }
