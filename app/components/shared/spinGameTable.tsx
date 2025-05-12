@@ -336,27 +336,7 @@ const handleSpin = async () => {
       setActive(false);
     }, 3000);
 
-   
-
-    try {
-
-      const res = await fetch('https://api.durowin.xyz/games/spin/play', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-          init_data: window.Telegram.WebApp.initData,
-          ton_bet: inputValue,
-        }),
-      });
-
-      const data: SpinResult = await res.json();
-
-      if (!data.result) {
-        push(`/${language}`);
-        return;
-      }
- const trimmedColumns = columns.map((col) => col.slice(-3));
+    const trimmedColumns = columns.map((col) => col.slice(-3));
     setColumns(trimmedColumns);
 
     const tempColumns: string[][] = [[], [], []];
@@ -376,6 +356,26 @@ const handleSpin = async () => {
     if (isFirstSpin) {
       setIsFirstSpin(false);
     }
+
+    try {
+
+      const res = await fetch('https://api.durowin.xyz/games/spin/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+          init_data: window.Telegram.WebApp.initData,
+          ton_bet: inputValue,
+        }),
+      });
+
+      const data: SpinResult = await res.json();
+
+      if (!data.result) {
+        push(`/${language}`);
+        return;
+      }
+
       setResult(data);
 
       play('start');     
