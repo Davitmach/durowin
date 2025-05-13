@@ -19,7 +19,7 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
-    <TonConnectUIProvider manifestUrl={'https://durowin.vercel.app/tonconnect-manifest.json'} >
+    <TonConnectUIProvider manifestUrl={'https://app.durowin.xyz/tonconnect-manifest.json'} >
       {children}
     </TonConnectUIProvider>
   );
