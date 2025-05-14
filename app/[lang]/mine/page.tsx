@@ -156,7 +156,7 @@ if(ref.current) {
   },[])
   useEffect(()=>{
     if(opened== 9 && gameStart ==true) {
-
+setShowQ(false);
       setChangeVal(true)
     }
   },
