@@ -19,17 +19,17 @@ const [opened,setOpen] = useState(0);
 const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
   const isMining = useRef(false);
-
+const [changeVal,setChangeVal] = useState(true);
 
   const handleIncrease = () => {
-    if(gameStart == true) return
+    if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
     setInputValue(newValue);
     if (ref.current) ref.current.value = newValue.toString();
   };
 
   const handleDicrement = () => {
-    if(gameStart == true) return
+    if(changeVal == false) return
     if (inputValue > 0.01) {
       const newValue = parseFloat((inputValue - 0.01).toFixed(2));
       setInputValue(newValue);
@@ -51,7 +51,7 @@ const Mine = async () => {
 
 
   setTimeout(async () => {
-
+setChangeVal(false)
   setGameStart(true);
     setShowWin(false);
     setData(null);
@@ -157,7 +157,7 @@ if(ref.current) {
   useEffect(()=>{
     if(opened== 9 && gameStart ==true) {
 
-      setGameStart(false)
+      setChangeVal(true)
     }
   },
   [gameStart,opened])
@@ -192,7 +192,7 @@ if(ref.current) {
             </div>
             <div className="relative">
               <input
-                disabled={gameStart}
+                disabled={changeVal== false ? true : false}
                 onChange={(e) => {setInputValue(parseFloat(e.target.value || "0"))
 
                   localStorage.setItem('mine_bet',e.target.value);
