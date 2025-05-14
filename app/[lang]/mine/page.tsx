@@ -38,109 +38,55 @@ const [clicked,setClick] = useState(false);
   };
 
 
-// const Mine = async () => {
-//    if(gameStart==true && opened==9) {
-//      setTimeout(() => {
-//   setOpen(0);
-//   setGameStart(false)   
-//   setClick(false) 
-//   }, 2000);
-//   setTimeout(() => {
-//     Mine()
-//   }, 4000);
-//     return
-    
-//    }
-//   if (isMining.current || gameStart) return; // мгновенная блокировка
-//   isMining.current = true;
-
-//   if (balance < inputValue) {
-//     play('noTon');
-//     isMining.current = false; // снимаем блокировку, если ошибка
-//     return;
-//   }
-
-//   setTimeout(async () => {
-//     setGameStart(true);
-//     setShowWin(false);
-//     setData(null);
-//     setBlockTypes(Array(9).fill('ton'));
-
-//     try {
-//       const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
-//         user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-//         init_data: window.Telegram.WebApp.initData,
-//         ton_bet: inputValue,
-//       });
-
-//       if (response.data.result) {
-//         play('mineStart');
-//         setData(response.data);
-//         decreaseBalance(inputValue);
-
-//         const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
-//         const values: ('ton' | 'dirt')[] = [
-//           ...Array(tonCount).fill('ton'),
-//           ...Array(9 - tonCount).fill('dirt'),
-//         ];
-//         const shuffled = [...values].sort(() => Math.random() - 0.5);
-//         setBlockTypes(shuffled);
-//       } else {
-//         setGameStart(false);
-//       }
-//     } catch (error) {
-//       console.error("Ошибка при старте игры:", error);
-//       setGameStart(false);
-//     } finally {
-//       isMining.current = false; // снимаем блокировку
-//     }
-//   }, 1000);
-// };
-
 const Mine = async () => {
-  if (isMining.current || gameStart) return;
+
+  if (isMining.current || gameStart) return; // мгновенная блокировка
+  isMining.current = true;
 
   if (balance < inputValue) {
     play('noTon');
+    isMining.current = false; // снимаем блокировку, если ошибка
     return;
   }
 
-  isMining.current = true;
-  setOpen(0);
-  setClick(false);
-  setGameStart(true);
-  setShowWin(false);
-  setData(null);
+  setTimeout(async () => {
+    setGameStart(true);
+    setShowWin(false);
+    setData(null);
+    setBlockTypes(Array(9).fill('ton'));
 
-  try {
-    const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
-      user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-      init_data: window.Telegram.WebApp.initData,
-      ton_bet: inputValue,
-    });
+    try {
+      const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
+        user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+        init_data: window.Telegram.WebApp.initData,
+        ton_bet: inputValue,
+      });
 
-    if (response.data.result) {
-      play('mineStart');
-      setData(response.data);
-      decreaseBalance(inputValue);
+      if (response.data.result) {
+        play('mineStart');
+        setData(response.data);
+        decreaseBalance(inputValue);
 
-      const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
-      const values: ('ton' | 'dirt')[] = [
-        ...Array(tonCount).fill('ton'),
-        ...Array(9 - tonCount).fill('dirt'),
-      ];
-      const shuffled = [...values].sort(() => Math.random() - 0.5);
-      setBlockTypes(shuffled);
-    } else {
+        const tonCount = response.data.result.results.filter((item: string) => item === 'ton').length;
+        const values: ('ton' | 'dirt')[] = [
+          ...Array(tonCount).fill('ton'),
+          ...Array(9 - tonCount).fill('dirt'),
+        ];
+        const shuffled = [...values].sort(() => Math.random() - 0.5);
+        setBlockTypes(shuffled);
+      } else {
+        setGameStart(false);
+      }
+    } catch (error) {
+      console.error("Ошибка при старте игры:", error);
       setGameStart(false);
+    } finally {
+      isMining.current = false; // снимаем блокировку
     }
-  } catch (error) {
-    console.error("Ошибка при старте игры:", error);
-    setGameStart(false);
-  } finally {
-    isMining.current = false;
-  }
+  }, 1000);
 };
+
+
 
   useEffect(() => {
     if (!gameStart) {
@@ -269,7 +215,20 @@ if(ref.current) {
             </div>
           </div>
           <div className="fadeIn">
-            <button onClick={Mine} className=" active:scale-[1.2] duration-[300ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
+            <button onClick={()=> {
+              if(gameStart== false) {
+              Mine()}
+              else {
+                if(gameStart == true && opened==9) {
+                  setOpen(0);
+  setGameStart(false)   
+  setClick(false) 
+  setTimeout(() => {
+    Mine()
+  }, 1500);
+                }
+              }
+              }} className=" active:scale-[1.2] duration-[300ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">GO</button>
           </div>
         </div>
       </div>
