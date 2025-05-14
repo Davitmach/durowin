@@ -40,7 +40,14 @@ const [clicked,setClick] = useState(false);
 
 const Mine = async () => {
    if(gameStart==true && opened==9) {
-    console.log('qaq');
+     setTimeout(() => {
+  setOpen(0);
+  setGameStart(false)   
+  setClick(false) 
+  }, 2000);
+  setTimeout(() => {
+    Mine()
+  }, 4000);
     return
     
    }
