@@ -48,15 +48,15 @@ const [first,setFirst] = useState(true)
         }
       }
     };
-    if(first) {
+    // if(first) {
       setTimeout(() => {
         fetchBalance();
         setFirst(false)
       }, 1000);
-    }
-setInterval(() => {
-   fetchBalance();
-}, 15000);
+    // }
+// setInterval(() => {
+//    fetchBalance();
+// }, 15000);
    
   }, [setBalance]);
 
