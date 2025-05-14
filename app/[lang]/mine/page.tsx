@@ -154,6 +154,13 @@ if(ref.current) {
   }
 }
   },[])
+  useEffect(()=>{
+    if(opened== 9 && gameStart ==true) {
+
+      setGameStart(false)
+    }
+  },
+  [gameStart,opened])
   return (
     <>
       <div className=" max-w-[400px] relative  mine_container w-full h-[100vh] mb-[20px]">
