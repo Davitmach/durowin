@@ -45,13 +45,13 @@ const Mine = async () => {
 
   if (balance < inputValue) {
     play('noTon');
-    isMining.current = false; // снимаем блокировку, если ошибка
+    isMining.current = false;
     return;
   }
 
-
-  setTimeout(async () => {
 setChangeVal(false)
+  setTimeout(async () => {
+
   setGameStart(true);
     setShowWin(false);
     setData(null);
