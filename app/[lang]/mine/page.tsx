@@ -39,7 +39,7 @@ const [clicked,setClick] = useState(false);
 
 
 const Mine = async () => {
-   if(gameStart==true && opened==0) {
+   if(gameStart==true && opened==9) {
     console.log('qaq');
     return
     
