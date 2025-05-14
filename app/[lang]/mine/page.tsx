@@ -20,7 +20,7 @@ const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
   const isMining = useRef(false);
 const [changeVal,setChangeVal] = useState(true);
-const [showQ,setShowQ] = useState(false);
+
   const handleIncrease = () => {
     if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
@@ -51,7 +51,7 @@ const Mine = async () => {
 
 setChangeVal(false)
   setTimeout(async () => {
-setShowQ(true);
+
   setGameStart(true);
     setShowWin(false);
     setData(null);
@@ -156,7 +156,7 @@ if(ref.current) {
   },[])
   useEffect(()=>{
     if(opened== 9 && gameStart ==true) {
-setShowQ(false);
+
       setChangeVal(true)
     }
   },
@@ -170,7 +170,7 @@ setShowQ(false);
 
         <div style={{justifyItems:'center'}} className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
           {blockTypes.map((type, index) => (
-            <MineBlock setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={showQ} key={index} type={type} />
+            <MineBlock setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
           ))}
         </div>
 
