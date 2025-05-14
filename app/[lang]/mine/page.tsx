@@ -40,7 +40,7 @@ const [clicked,setClick] = useState(false);
 
 const Mine = async () => {
 
-  if (isMining.current || gameStart) return; // мгновенная блокировка
+  if (isMining.current) return; // мгновенная блокировка
   isMining.current = true;
 
   if (balance < inputValue) {
@@ -48,13 +48,14 @@ const Mine = async () => {
     isMining.current = false; // снимаем блокировку, если ошибка
     return;
   }
-  
-  setTimeout(async () => {
-
   setGameStart(true);
     setShowWin(false);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
+
+  setTimeout(async () => {
+
+
     try {
       const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
         user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
