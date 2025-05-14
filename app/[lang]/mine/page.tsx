@@ -48,13 +48,13 @@ const Mine = async () => {
     isMining.current = false; // снимаем блокировку, если ошибка
     return;
   }
-    setGameStart(true);
+  
+  setTimeout(async () => {
+
+  setGameStart(true);
     setShowWin(false);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
-  // setTimeout(async () => {
-
-
     try {
       const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
         user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
@@ -83,7 +83,7 @@ const Mine = async () => {
     } finally {
       isMining.current = false; // снимаем блокировку
     }
-  // }, 1000);
+  }, 1000);
 };
 
 
