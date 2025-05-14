@@ -228,6 +228,15 @@ if(opened ==9 && gameStart ==true) {
 }
 
   },[opened])
+  useEffect(()=> {
+const check = localStorage.getItem('mine_bet');
+if(ref.current) {
+  if(check) {
+    ref.current.value = check;
+    setInputValue(parseFloat(check));
+  }
+}
+  },[])
   return (
     <>
       <div className=" max-w-[400px] relative  mine_container w-full h-[100vh] mb-[20px]">
@@ -260,7 +269,10 @@ if(opened ==9 && gameStart ==true) {
             <div className="relative">
               <input
                 disabled={gameStart}
-                onChange={(e) => setInputValue(parseFloat(e.target.value || "0"))}
+                onChange={(e) => {setInputValue(parseFloat(e.target.value || "0"))
+
+                  localStorage.setItem('mine_bet',e.target.value);
+                }}
                 ref={ref}
                 defaultValue={0.01}
                 className="w-[106px] outline-none border border-[#381CB280] bg-[#482BAB] h-[52px] rounded-[100px] pl-[45px] text-[#999999] font-[500] text-[16px] pr-[10px]"
