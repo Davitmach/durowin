@@ -39,12 +39,16 @@ const [clicked,setClick] = useState(false);
 
 
 const Mine = async () => {
-  if(gameStart==true && opened == 9) {
-    
-      setOpen(0);
-      setGameStart(false)   
-      setClick(false) 
-  Mine()
+   if (gameStart === true && opened === 9) {
+    setOpen(0);
+    setGameStart(false);
+    setClick(false);
+
+    // Ждём, пока состояние сбросится, затем повторно вызываем Mine
+    setTimeout(() => {
+      Mine();
+    }, 100); // Короткая задержка, чтобы успели примениться setState
+    return;
   }
   if (isMining.current || gameStart) return; // мгновенная блокировка
   isMining.current = true;
