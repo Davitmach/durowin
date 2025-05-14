@@ -48,14 +48,14 @@ const Mine = async () => {
     isMining.current = false; // снимаем блокировку, если ошибка
     return;
   }
+
+
+  setTimeout(async () => {
+
   setGameStart(true);
     setShowWin(false);
     setData(null);
     setBlockTypes(Array(9).fill('ton'));
-
-  setTimeout(async () => {
-
-
     try {
       const response = await axios.post('https://api.durowin.xyz/games/mine/play', {
         user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
@@ -144,17 +144,7 @@ setTimeout(() => {
 }, 1000);
     
   }, [setBalance]);
-//   useEffect(()=> {
-// if(opened ==9 && gameStart ==true) {
-//   setTimeout(() => {
-//   setOpen(0);
-//   setGameStart(false)   
-//   setClick(false) 
-//   }, 2000);
 
-// }
-
-//   },[opened])
   useEffect(()=> {
 const check = localStorage.getItem('mine_bet');
 if(ref.current) {
@@ -218,6 +208,7 @@ if(ref.current) {
           <div className="fadeIn">
             <button onClick={() => {
     if (!gameStart) {
+    
       Mine();
     } else if (opened === 9) {
       setOpen(0);
