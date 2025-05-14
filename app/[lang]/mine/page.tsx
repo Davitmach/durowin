@@ -44,7 +44,7 @@ const Mine = async () => {
       setOpen(0);
       setGameStart(false)   
       setClick(false) 
-  
+  Mine()
   }
   if (isMining.current || gameStart) return; // мгновенная блокировка
   isMining.current = true;
