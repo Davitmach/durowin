@@ -69,8 +69,7 @@ const {push} = useRouter();
     //   }, 1000);
     // };
   const startHold = () => {
-  if (isFirstSpin) return;
-  if (active) return;
+  if (isFirstSpin || active) return;
 
   holdTimer.current = setTimeout(() => {
     enableAutoSpin();
@@ -87,7 +86,7 @@ const {push} = useRouter();
       if (intervalId.current) return; // уже включена
       setAuto(true);
       intervalId.current = setInterval(() => {
-        console.log('qaqem beynit');
+       
 
           handleSpin();
     
@@ -112,17 +111,21 @@ const {push} = useRouter();
     //     handleSpin(); // обычный спин
     //   }
     // };
-  
-   const handleClick = () => {
+  const handleClick = () => {
+  // Если автоспин активен — отключаем его даже во время спина
   if (auto) {
-    disableAutoSpin(); // Отключаем автоспин сразу
+    disableAutoSpin();
     return;
   }
 
-  if (active) return; // Не запускать, если уже идёт спин
-  handleSpin(); // Обычный спин
+  // Если сейчас идёт спин — игнорируем ручной спин
+  if (active) return;
+
+  // Запускаем обычный спин
+  handleSpin();
 };
 
+   
     useEffect(() => {
       return () => {
         clearTimeout(holdTimer.current);
