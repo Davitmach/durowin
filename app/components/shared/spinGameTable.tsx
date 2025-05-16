@@ -59,23 +59,16 @@ const {push} = useRouter();
     }, []);
     const [isFirstSpin, setIsFirstSpin] = useState(true); 
 
-    // const startHold = () => {
-    //   if(isFirstSpin == true) return
-    //  if(active) return
-    //   wasHeld.current = false;
-    //   holdTimer.current = setTimeout(() => {
-    //     wasHeld.current = true;
-    //     enableAutoSpin();
-    //   }, 1000);
-    // };
-  const startHold = () => {
-  if (isFirstSpin || active) return;
-
-  holdTimer.current = setTimeout(() => {
-    enableAutoSpin();
-  }, 1000);
-};
-
+    const startHold = () => {
+      if(isFirstSpin == true) return
+     if(active) return
+      wasHeld.current = false;
+      holdTimer.current = setTimeout(() => {
+        wasHeld.current = true;
+        enableAutoSpin();
+      }, 1000);
+    };
+  
     const cancelHold = () => {
       clearTimeout(holdTimer.current);
     };
@@ -86,7 +79,7 @@ const {push} = useRouter();
       if (intervalId.current) return; // уже включена
       setAuto(true);
       intervalId.current = setInterval(() => {
-       
+        
 
           handleSpin();
     
@@ -103,28 +96,15 @@ const {push} = useRouter();
     };
   
 
-    // const handleClick = () => {
-    //   if (wasHeld.current) return; // не обрабатывать клик после удержания
-    //   if (auto) {
-    //     disableAutoSpin(); // выключаем авто
-    //   } else {
-    //     handleSpin(); // обычный спин
-    //   }
-    // };
-  const handleClick = () => {
-  // Если автоспин активен — отключаем его даже во время спина
-  if (auto) {
-    disableAutoSpin();
-    return;
-  }
-
-  // Если сейчас идёт спин — игнорируем ручной спин
-  if (active) return;
-
-  // Запускаем обычный спин
-  handleSpin();
-};
-
+    const handleClick = () => {
+      if (wasHeld.current) return; // не обрабатывать клик после удержания
+      if (auto) {
+        disableAutoSpin(); // выключаем авто
+      } else {
+        handleSpin(); // обычный спин
+      }
+    };
+  
    
     useEffect(() => {
       return () => {
