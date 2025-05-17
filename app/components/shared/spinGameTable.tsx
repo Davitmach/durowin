@@ -100,9 +100,10 @@ const {push} = useRouter();
       // if (wasHeld.current) return; 
       
       
-      if (auto) {
+      if (auto && first==false) {
         disableAutoSpin(); // выключаем авто
         console.log('disable');
+        setFirst(true)
       } else {
         handleSpin(); // обычный спин
         console.log('simple spin');
@@ -170,7 +171,7 @@ const handleSpin = async () => {
         push(`/${language}`);
         return;
       }
-
+setFirst(false)
       setResult(data);
 
       play('start');     
