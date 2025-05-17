@@ -20,7 +20,7 @@ const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
   const isMining = useRef(false);
 const [changeVal,setChangeVal] = useState(true);
-const [quest,setQuest] = useState(false);
+const [quest,setQuest] = useState(true);
   const handleIncrease = () => {
     if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
