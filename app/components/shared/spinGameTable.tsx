@@ -65,7 +65,7 @@ const {push} = useRouter();
      if(active) return
       wasHeld.current = false;
       holdTimer.current = setTimeout(() => {
-        // wasHeld.current = true;
+        wasHeld.current = true;
         enableAutoSpin();
       }, 1000);
     };
@@ -77,8 +77,11 @@ const {push} = useRouter();
 
     const enableAutoSpin = () => {
        if(isFirstSpin == true) return
-      if (intervalId.current) return; // уже включена
+      if (intervalId.current) return; 
       setAuto(true);
+      setTimeout(() => {
+        wasHeld.current = false;
+      }, 1000);
       intervalId.current = setInterval(() => {
         
 
