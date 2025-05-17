@@ -99,6 +99,7 @@ const {push} = useRouter();
 
     const handleClick = () => {
       
+      console.log('qaq');
       
       if (wasHeld.current) return; 
      
