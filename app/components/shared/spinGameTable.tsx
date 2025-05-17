@@ -65,7 +65,7 @@ const {push} = useRouter();
      if(active) return
       wasHeld.current = false;
       holdTimer.current = setTimeout(() => {
-        wasHeld.current = true;
+        // wasHeld.current = true;
         enableAutoSpin();
       }, 1000);
     };
@@ -99,7 +99,7 @@ const {push} = useRouter();
 
     const handleClick = () => {
       
-      console.log('qaq');
+      
       
       if (wasHeld.current) return; 
      
