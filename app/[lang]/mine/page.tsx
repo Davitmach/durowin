@@ -76,7 +76,7 @@ setChangeVal(false)
         const shuffled = [...values].sort(() => Math.random() - 0.5);
         setBlockTypes(shuffled);
       } else {
-        setGameStart(false);
+        // setGameStart(false);
       }
     } catch (error) {
       console.error("Ошибка при старте игры:", error);
@@ -220,7 +220,7 @@ if(ref.current) {
     } else if (opened === 9) {
       setOpen(0);
       setClick(false);
-      setGameStart(false);
+      // setGameStart(false);
       setTimeout(() => {
         Mine();
       }, 100);
