@@ -97,10 +97,10 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
-      console.log('qaq');
       
-      if (wasHeld.current) return; // не обрабатывать клик после удержания
-      console.log('prosto click');
+      
+      if (wasHeld.current) return; 
+     
       
       if (auto) {
         disableAutoSpin(); // выключаем авто
@@ -127,7 +127,7 @@ const handleSpin = async () => {
     setSpin(false);
     setShowResult(false);
     setResult(null);
-    setActive(true);
+    // setActive(true);
     setTimeout(() => {
       setActive(false);
     }, 3000);
