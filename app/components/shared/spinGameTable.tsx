@@ -97,17 +97,14 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
-      if(first == true) return
-      // if (wasHeld.current) return; 
+      if (wasHeld.current) return; // не обрабатывать клик после удержания
+      console.log('prosto click');
       
-      
-      if (auto && first==false) {
-        disableAutoSpin(); 
-        console.log('disable');
-        setFirst(true)
+      if (auto) {
+        disableAutoSpin(); // выключаем авто
+        
       } else {
         handleSpin(); // обычный спин
-        console.log('simple spin');
       }
     };
   
