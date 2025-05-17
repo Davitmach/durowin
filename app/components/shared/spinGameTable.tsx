@@ -44,7 +44,6 @@ const [first,setFirst] = useState(true);
     const [showResult, setShowResult] = useState(false);
   const [active,setActive] = useState(false);
   const {balance} = useBalanceStore();
-
 const {play} = useSoundPlayer();
 const {push} = useRouter();
     useEffect(() => {
@@ -77,11 +76,8 @@ const {push} = useRouter();
 
     const enableAutoSpin = () => {
        if(isFirstSpin == true) return
-      if (intervalId.current) return; 
+      if (intervalId.current) return; // уже включена
       setAuto(true);
-      setTimeout(() => {
-        wasHeld.current = false;
-      }, 1000);
       intervalId.current = setInterval(() => {
         
 
@@ -101,11 +97,10 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
+      console.log('qaq');
       
-      
-      
-      if (wasHeld.current) return; 
-     
+      if (wasHeld.current) return; // не обрабатывать клик после удержания
+      console.log('prosto click');
       
       if (auto) {
         disableAutoSpin(); // выключаем авто
@@ -417,7 +412,7 @@ ref.current.value = check
       onMouseLeave={cancelHold}
       onTouchStart={startHold}
       onTouchEnd={cancelHold}
-      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={auto ==false ? active: false}  className="outline-none active:scale-[1.2] no-select duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
+      onClick={handleClick}   style={{transform:auto ==true ? 'scale(1.2)': 'scale(1)'}} disabled={active}  className="outline-none active:scale-[1.2] no-select duration-[400ms] spin_btn bg-[#742CF1] rounded-[100px] w-[113px] h-[113px] font-[700] text-white text-[32px] cursor-pointer border-[7px] border-[#8643FA]">SPIN</button></div>
         </div>
         <style jsx>{`
         .spin-col {
