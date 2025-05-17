@@ -14,19 +14,19 @@ interface IMineBlock {
 }
 
 export const MineBlock = (props: IMineBlock) => {
-  const [exploded, setExploded] = useState(false); // Состояние, отвечает за взрыв блока
-  const { play } = useSoundPlayer(); // Звук
+  const [exploded, setExploded] = useState(false); 
+  const { play } = useSoundPlayer();
 
-  // Обработчик клика
+
   const handleClick = () => {
-    if (!props.gameStart || exploded) return; // Блок не должен взрываться, если уже взорван
+    if (!props.gameStart || exploded) return; 
 props.setOpened((prev)=> prev+1)
-    setExploded(true); // Отметим блок как взорванный
+    setExploded(true); 
     if (props.type === 'dirt') {
-      play('mineDirt'); // Звук для грязи
+      play('mineDirt'); 
     } else {
-      play('mineTon'); // Звук для тона
-      props.showWin(true); // Показываем выигрыш
+      play('mineTon'); 
+      props.showWin(true);
       setTimeout(() => {
         props.showWin(false)
       }, 700);
@@ -35,7 +35,7 @@ props.setOpened((prev)=> prev+1)
 
   useEffect(() => {
     if (!props.gameStart) {
-      setExploded(false); // Сброс взрывов, если игра не началась
+      setExploded(false); 
     }
   }, [props.gameStart]);
 

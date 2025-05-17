@@ -20,7 +20,7 @@ const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
   const isMining = useRef(false);
 const [changeVal,setChangeVal] = useState(true);
-const [quest,setQuest] = useState(true);
+const [quest,setQuest] = useState(false);
   const handleIncrease = () => {
     if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
@@ -48,7 +48,7 @@ const Mine = async () => {
     isMining.current = false;
     return;
   }
-
+setQuest(true)
 setChangeVal(false)
   setTimeout(async () => {
 
