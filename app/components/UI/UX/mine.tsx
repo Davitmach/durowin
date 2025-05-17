@@ -6,6 +6,7 @@ import { FaQuestion } from "react-icons/fa6";
 interface IMineBlock {
   type: 'dirt' | 'ton';
   gameStart: boolean;
+  quest:boolean;
   showWin: React.Dispatch<React.SetStateAction<boolean>>; // Передаем setShowWin
   setStart:React.Dispatch<React.SetStateAction<boolean>>;
   setOpened:React.Dispatch<React.SetStateAction<number>>;
@@ -44,7 +45,7 @@ props.setOpened((prev)=> prev+1)
       onClick={handleClick}
     >
       <div className={`bg-white z-[9999] w-full h-full flex items-center justify-center rounded-[16px] ${exploded ? "explode-animation" : ""}`}>
-        <FaQuestion opacity={props.gameStart === false ? '0' : '1'} className="z-10 pointer-events-none duration-300" fontSize={60} color="#742CF1" />
+        <FaQuestion opacity={props.quest === false ? '0' : '1'} className="z-10 pointer-events-none duration-300" fontSize={60} color="#742CF1" />
       </div>
       <div className="z-[0] absolute rounded-[16px] overflow-hidden ">
         <img src={props.type === 'ton' ? '/almaz.jpg' : '/dirtMine.jpg'} />
