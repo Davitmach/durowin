@@ -341,9 +341,7 @@ ref.current.value = check
 
 
 <div className="h-[170px] flex overflow-hidden gap-[3px] ">
-<div className="absolute bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
-<div className="absolute left-[50%] translate-x-[-50%] bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
-<div className="absolute right-[5px]  bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
+
         {columns.map((col, colIndex) => (
           <div 
             key={colIndex}
@@ -359,7 +357,7 @@ ref.current.value = check
                 <div
                   key={i}
                   className={
-                    'h-[59px] z-[2] bg-[#8643FA]  shrink-0 py-[27px] px-[27px]  flex items-center justify-center ' 
+                    'h-[59px]  bg-[#8643FA]  shrink-0 py-[27px] px-[27px]  flex items-center justify-center ' 
                   
                   }
                 >
