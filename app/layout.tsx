@@ -19,6 +19,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "Durowin",
   description: "Durowin",
+   icons:'/logo.jpg'
 };
 
 export default function RootLayout({
