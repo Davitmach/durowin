@@ -7,6 +7,7 @@ interface IMineBlock {
   type: 'dirt' | 'ton';
   gameStart: boolean;
   quest:boolean;
+  load:boolean;
   showWin: React.Dispatch<React.SetStateAction<boolean>>; // Передаем setShowWin
   setStart:React.Dispatch<React.SetStateAction<boolean>>;
   setOpened:React.Dispatch<React.SetStateAction<number>>;
@@ -19,6 +20,7 @@ export const MineBlock = (props: IMineBlock) => {
 
 
   const handleClick = () => {
+    if(props.load==false) return
     if (!props.gameStart || exploded) return; 
 props.setOpened((prev)=> prev+1)
     setExploded(true); 

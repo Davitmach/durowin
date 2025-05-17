@@ -21,6 +21,7 @@ const [clicked,setClick] = useState(false);
   const isMining = useRef(false);
 const [changeVal,setChangeVal] = useState(true);
 const [quest,setQuest] = useState(false);
+const [load,setLoad] = useState(false);
   const handleIncrease = () => {
     if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
@@ -75,6 +76,7 @@ setChangeVal(false)
         ];
         const shuffled = [...values].sort(() => Math.random() - 0.5);
         setBlockTypes(shuffled);
+        setLoad(true)
       } else {
         setGameStart(false);
       }
@@ -158,6 +160,7 @@ if(ref.current) {
     if(opened== 9 && gameStart ==true) {
 
       setChangeVal(true)
+      setLoad(false)
     }
   },
   [gameStart,opened])
@@ -170,7 +173,7 @@ if(ref.current) {
 
         <div style={{justifyItems:'center'}} className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
           {blockTypes.map((type, index) => (
-            <MineBlock quest={quest} setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
+            <MineBlock load={load} quest={quest} setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
           ))}
         </div>
 
