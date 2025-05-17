@@ -97,6 +97,7 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
+      if(first == true) return
       // if (wasHeld.current) return; 
       
       
