@@ -62,6 +62,8 @@ const {push} = useRouter();
     const startHold = () => {
       if(isFirstSpin == true) return
      if(active) return
+     console.log('hold');
+     
       wasHeld.current = false;
       holdTimer.current = setTimeout(() => {
         wasHeld.current = true;
