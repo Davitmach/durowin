@@ -97,8 +97,8 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
-      if (wasHeld.current) return; // не обрабатывать клик после удержания
-      console.log('prosto click');
+      // if (wasHeld.current) return; 
+      
       
       if (auto) {
         disableAutoSpin(); // выключаем авто
