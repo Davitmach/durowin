@@ -62,8 +62,7 @@ const {push} = useRouter();
     const startHold = () => {
       if(navigator.onLine==false) return
       if(isFirstSpin == true) return
-    //  if(active) return
-     console.log('hold');
+
      
       wasHeld.current = false;
       holdTimer.current = setTimeout(() => {
@@ -103,10 +102,10 @@ const {push} = useRouter();
 
     const handleClick = () => {
       if(navigator.onLine==false) return
-      console.log('qaq');
+
       
       if (wasHeld.current) return; // не обрабатывать клик после удержания
-      console.log('prosto click');
+ 
       
       if (auto) {
         disableAutoSpin(); // выключаем авто

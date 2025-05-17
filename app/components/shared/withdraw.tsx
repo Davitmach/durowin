@@ -8,10 +8,7 @@ export const Withdraw = () => {
     const setWithdrawals = useTransactionStore((s) => s.setWithdrawals);
     const {id,initData} = UserData()
     const {balance} = useBalanceStore();
-    useEffect(()=> {
-console.log(balance);
 
-    },[balance])
  const fetchWithdrawals = async () => {
       try {
         const res = await fetch(`https://api.durowin.xyz/withdraws/get_user_list/${id}/${encodeURIComponent(initData)}`);
@@ -68,7 +65,7 @@ const {language} = useLanguageStore();
         to_address: address,
         ton_amount: parseFloat(amount),
       })
-     console.log(data.data);
+
      if(data.data.status == 'process') {
       decreaseBalance(parseFloat(amount))
       setTimeout(() => {

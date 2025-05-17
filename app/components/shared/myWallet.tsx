@@ -23,9 +23,7 @@ export const MyWallet = () => {
   const ref = useRef<HTMLInputElement>(null);
   const [show,setShow] = useState(false);
 
-  useEffect(() => {
-    console.log(userWalletAddress);
-  }, [userWalletAddress]);
+
 
   const handleClick = () => {
     setOpen(true);
