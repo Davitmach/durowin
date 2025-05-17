@@ -341,11 +341,14 @@ ref.current.value = check
 
 
 <div className="h-[170px] flex overflow-hidden gap-[3px] ">
+<div className="absolute bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
+<div className="absolute left-[50%] translate-x-[-50%] bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
+<div className="absolute right-[5px]  bg-[#8643FA] z-[2]  w-[31.6%] h-full"></div>
         {columns.map((col, colIndex) => (
           <div 
             key={colIndex}
             className={
-              'flex bg-[#8643FA] bg-fixed    flex-1 flex-col  ' +
+              ' flex  bg-fixed bg-[#8643FA]    flex-1 flex-col  ' +
               (spin ? `spin-col  spin-delay-${colIndex}` : '')
             }
           >
@@ -356,7 +359,7 @@ ref.current.value = check
                 <div
                   key={i}
                   className={
-                    'h-[59px]  shrink-0 py-[27px] px-[27px]  bg-[#8643FA] flex items-center justify-center ' 
+                    'h-[59px] z-[2] bg-[#8643FA]  shrink-0 py-[27px] px-[27px]  flex items-center justify-center ' 
                   
                   }
                 >
