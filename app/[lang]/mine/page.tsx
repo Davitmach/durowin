@@ -20,7 +20,7 @@ const [clicked,setClick] = useState(false);
   const { decreaseBalance, setBalance,balance } = useBalanceStore();
   const isMining = useRef(false);
 const [changeVal,setChangeVal] = useState(true);
-
+const [quest,setQuest] = useState(false);
   const handleIncrease = () => {
     if(changeVal == false) return
     const newValue = parseFloat((inputValue + 0.01).toFixed(2));
@@ -170,7 +170,7 @@ if(ref.current) {
 
         <div style={{justifyItems:'center'}} className="w-full grid grid-cols-3 gap-[16px] mt-[20px]">
           {blockTypes.map((type, index) => (
-            <MineBlock setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
+            <MineBlock quest={quest} setOpened={setOpen} setStart={setGameStart} showWin={setShowWin} gameStart={gameStart} key={index} type={type} />
           ))}
         </div>
 
