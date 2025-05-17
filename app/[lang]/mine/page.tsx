@@ -39,7 +39,7 @@ const [quest,setQuest] = useState(false);
 
 
 const Mine = async () => {
-
+if(navigator.onLine==false) return
   if (isMining.current) return;
   isMining.current = true;
 

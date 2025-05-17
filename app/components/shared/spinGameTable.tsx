@@ -60,6 +60,7 @@ const {push} = useRouter();
     const [isFirstSpin, setIsFirstSpin] = useState(true); 
 
     const startHold = () => {
+      if(navigator.onLine==false) return
       if(isFirstSpin == true) return
     //  if(active) return
      console.log('hold');
@@ -77,6 +78,7 @@ const {push} = useRouter();
   
 
     const enableAutoSpin = () => {
+      if(navigator.onLine==false) return
        if(isFirstSpin == true) return
       if (intervalId.current) return; // уже включена
       setAuto(true);
@@ -90,6 +92,7 @@ const {push} = useRouter();
   
 
     const disableAutoSpin = () => {
+      if(navigator.onLine==false) return
       setAuto(false);
       if (intervalId.current) {
         clearInterval(intervalId.current);
@@ -99,6 +102,7 @@ const {push} = useRouter();
   
 
     const handleClick = () => {
+      if(navigator.onLine==false) return
       console.log('qaq');
       
       if (wasHeld.current) return; // не обрабатывать клик после удержания
@@ -123,6 +127,7 @@ const {push} = useRouter();
 
 
 const handleSpin = async () => {
+  if(navigator.onLine==false) return
   if (inputValue < balance) {
     decreaseBalance(inputValue);
 
@@ -170,7 +175,7 @@ const handleSpin = async () => {
       const data: SpinResult = await res.json();
 
       if (!data.result) {
-        push(`/${language}`);
+        
         return;
       }
 
@@ -232,6 +237,7 @@ const handleSpin = async () => {
   
   
     const handleIncrease = () => {
+      if(navigator.onLine==false) return
       const newValue = parseFloat((inputValue + 0.01).toFixed(2));
       if(auto == true) {
         disableAutoSpin();
@@ -240,6 +246,7 @@ const handleSpin = async () => {
       if (ref.current) ref.current.value = newValue.toString();
     };
     const handleDicrement = () => {
+      if(navigator.onLine==false) return
         if(inputValue > 0.01) {
           if(auto == true) {
             disableAutoSpin();
